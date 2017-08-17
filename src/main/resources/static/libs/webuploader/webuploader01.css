@@ -1,0 +1,53 @@
+.webuploader-container {
+	position: relative;
+}
+
+.webuploader-element-invisible {
+	position: absolute !important;
+	clip: rect(1px, 1px, 1px, 1px); /* IE6, IE7 */
+	clip: rect(1px, 1px, 1px, 1px);
+}
+
+.webuploader-pick-disable {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.item {
+	width: 280px;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+}
+
+.item .tips {
+	line-height: 30px;
+	padding: 8px;
+	border-radius: 5px;
+	background-color: #eff5ff;
+	border: 1px solid #c0c0c0;
+	color: #c0c0c0;
+	position: absolute;
+	display: none;
+	z-index: 999;
+}
+
+.info {
+	display: inline-block;
+	width: 130px;
+	height: 30px;
+	line-height: 30px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	float: left;
+}
+
+.state {
+	display: inline-block;
+	width: 60px;
+	height: 30px;
+	line-height: 30px;
+	margin-top: -10px;
+	font-size: 0.5em;
+	color: #c0c0c0;
+}

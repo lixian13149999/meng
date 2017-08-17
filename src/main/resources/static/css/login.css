@@ -1,0 +1,9 @@
+/*登录框的div*/
+
+.formbox {
+    width: 600px;
+    height: 500px;
+    margin: 150px auto 0;
+    border: solid #ddd 1px;
+    padding: 100px;
+}

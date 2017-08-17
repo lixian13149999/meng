@@ -1,0 +1,46 @@
+server-host: 192.168.0.106
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    url: jdbc:mysql://${server-host}:3306/meng?characterEncoding=utf-8&useSSL=false
+
+#    validation-query: true
+  jpa:
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+#    hibernate:
+#      ddl-auto: create
+    show-sql: true
+
+  redis:
+    host: ${server-host}
+    port: 6379
+    #password:
+    database: 0
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+
+#my:
+#  redis:
+#    host-name: ${server-host}
+#    port: 6379
+#    password:
+#    db-index: 1
+#    max-active: 8
+#    max-wait: -1
+#    max-idle: 8
+#    min-idle: 0
+
+#  jackson:
+#    default-property-inclusion: non_null
+
+#server:
+#  context-path: /sell
