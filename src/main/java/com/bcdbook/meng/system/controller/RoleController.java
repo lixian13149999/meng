@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/role")
 @Slf4j
-@Api(tags = {SwaggerTagsConstant.COMMON})
+@Api(tags = {SwaggerTagsConstant.ROLE})
 public class RoleController {
 
     @PostMapping("/save")
     public String save() {
+
         //- TODO 添加角色
         return null;
     }

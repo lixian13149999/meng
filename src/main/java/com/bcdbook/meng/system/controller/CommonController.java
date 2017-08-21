@@ -94,7 +94,7 @@ public class CommonController {
                     ,loginUserForm
                     ,bindingResult.getFieldError().getDefaultMessage());
 
-            throw new CommonException(ResultEnum.PARAM_ERROR);
+            throw new CommonException(ResultEnum.PARAM_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
 
         /**

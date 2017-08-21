@@ -62,6 +62,7 @@ public class UserController {
 
 
     @GetMapping
+    @ResponseBody
     public String test(){
         return "success";
     }
