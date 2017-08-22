@@ -3,9 +3,13 @@ package com.bcdbook.meng.system.service.impl;
 import com.bcdbook.meng.common.constant.LevelConstant;
 import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.CommonException;
+import com.bcdbook.meng.system.DTO.IResourceDTO;
+import com.bcdbook.meng.system.converter.IResource2IResourceDTOConverter;
 import com.bcdbook.meng.system.enums.IResourceTypeEnum;
 import com.bcdbook.meng.system.model.IResource;
+import com.bcdbook.meng.system.model.RoleIResource;
 import com.bcdbook.meng.system.repository.IResourceRepository;
+import com.bcdbook.meng.system.repository.RoleIResourceRepository;
 import com.bcdbook.meng.system.service.IResourceService;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author summer
@@ -25,6 +32,9 @@ public class IResourceServiceImpl implements IResourceService {
 
     @Autowired
     private IResourceRepository iResourceRepository;
+
+    @Autowired
+    private RoleIResourceRepository roleIResourceRepository;
 
     @Override
     public IResource findOne(String iResourceId) {
@@ -172,4 +182,208 @@ public class IResourceServiceImpl implements IResourceService {
 
         return true;
     }
+
+    /**
+     * @author summer
+     * @date 2017/8/21 下午8:20
+     * @param
+     * @return java.util.List<com.bcdbook.meng.system.model.IResource>
+     * @description 查询所有的资源集合
+     */
+    @Override
+    public List<IResourceDTO> listAll() {
+        //1.查询出所有的资源对象
+        List<IResource> sourceIResourceList = iResourceRepository.findAll();
+        if(sourceIResourceList==null||sourceIResourceList.size()<=0){
+            return null;
+        }
+
+        //创建IResourceDTO集合, 用于copy源数据
+        List<IResourceDTO> iResourceDTOList = IResource2IResourceDTOConverter.convert(sourceIResourceList);
+//        for (IResource iresource:sourceIResourceList) {
+//            IResourceDTO iResourceDTO = new IResourceDTO();
+//            BeanUtils.copyProperties(iresource,iResourceDTO);
+//            iResourceDTOList.add(iResourceDTO);
+//        }
+
+        //对资源对象进行封装,以获取有结构的资源集合
+        List<IResourceDTO> topLevelMenus = parseList(iResourceDTOList);
+
+        return topLevelMenus;
+    }
+
+    /**
+     * @author summer
+     * @date 2017/8/22 下午1:45
+     * @param iResourceIdList
+     * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
+     * @description 根据资源集合,获取相关资源对象(菜单)
+     */
+    @Override
+    public List<IResourceDTO> listIResourceByIdList(List<String> iResourceIdList) {
+        if(iResourceIdList==null||iResourceIdList.size()<=0){
+            return null;
+        }
+        //查询菜单类型的资源集合
+        List<IResource> iResourceList = iResourceRepository.findByIResourceTypeAndIdIn(IResourceTypeEnum.MENU.getCode(),iResourceIdList);
+        if(iResourceList==null||iResourceList.size()<=0){
+            return null;
+        }
+
+        List<IResourceDTO> iResourceDTOList = IResource2IResourceDTOConverter.convert(iResourceList);
+
+        return parseList(iResourceDTOList);
+    }
+
+    /**
+     * @author summer
+     * @date 2017/8/22 下午2:23
+     * @param iResourceIdList
+     * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
+     * @description 查询出所有的资源对象,并标注出传入id集合的资源对象
+     */
+    @Override
+    public List<IResourceDTO> listAllAndChecked(List<String> iResourceIdList) {
+        //参数合法性验证
+        if(iResourceIdList==null||iResourceIdList.size()<=0){
+            return null;
+        }
+        //获取所有的资源对象
+        List<IResource> allIResourceList = iResourceRepository.findAll();
+        //获取在当前数据集合中的资源对象
+        List<IResource> iResourceList = iResourceRepository.findByIdIn(iResourceIdList);
+        if(allIResourceList==null||allIResourceList.size()<=0){
+            return null;
+        }
+
+        //集合数据类型转换
+        List<IResourceDTO> allIResourceDTOList = IResource2IResourceDTOConverter.convert(allIResourceList);
+        List<IResourceDTO> iResourceDTOList = IResource2IResourceDTOConverter.convert(iResourceList);
+
+        //执行标注
+        for (IResourceDTO fullIResource:allIResourceDTOList) {
+            for (IResourceDTO possessIResource : iResourceDTOList) {
+                if(fullIResource.getId().equals(possessIResource.getId())){
+                    fullIResource.setPossess(true);
+                }
+            }
+        }
+
+        //执行封装
+        List<IResourceDTO> parseList = parseList(allIResourceDTOList);
+
+        return parseList;
+    }
+
+    @Override
+    public List<String> listIResourceIdByRoleIdList(List<String> roleList) {
+        if(roleList==null||roleList.size()<=0){
+            return null;
+        }
+        List<RoleIResource> roleIResourceList = roleIResourceRepository.findByRoleIResourceKey_RoleIdIn(roleList);
+        List<String> iResourceIdList = roleIResourceList
+                .stream()
+                .map(e -> e.getRoleIResourceKey().getIResourceId())
+                .collect(Collectors.toList());
+
+        return iResourceIdList;
+    }
+
+    /**
+     * @author summer
+     * @date 2017/8/22 上午10:13
+     * @param sourceIResourceDTOList
+     * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
+     * @description
+     */
+    private List<IResourceDTO> parseList(List<IResourceDTO> sourceIResourceDTOList) {
+        
+        if(sourceIResourceDTOList==null||sourceIResourceDTOList.size()==0){
+            return null;
+        }
+
+        //对所有的资源对象进行排序
+        List<IResourceDTO> allIResources = sourceIResourceDTOList
+                .stream()
+                .sorted((r1, r2) -> r1.getSort().compareTo(r2.getSort()))
+                .collect(Collectors.toList());
+
+        //2.对资源对象分类封装,并转换数据类型
+        List<IResourceDTO> topLevelMenus = new ArrayList<>();
+        List<IResourceDTO> secondLeveMenus = new ArrayList<>();
+        List<IResourceDTO> buttons = new ArrayList<>();
+
+        /**
+         * 循环所有的资源对象
+         * 对资源进行分类
+         */
+        for (IResourceDTO iResourceDTO : allIResources) {
+            //如果是菜单
+            if (IResourceTypeEnum.MENU.getCode() == iResourceDTO.getIResourceType()) {
+                //如果是一级
+                if (LevelConstant.TOP_LEVEL.equals(iResourceDTO.getParentId())) {
+                    topLevelMenus.add(iResourceDTO);//添加资源到一级菜单集合
+                } else {
+                    secondLeveMenus.add(iResourceDTO);//添加资源到二级菜单集合
+                }
+            } else if (IResourceTypeEnum.BUTTON.getCode() == iResourceDTO.getIResourceType()) {
+                buttons.add(iResourceDTO);//添加资源到button集合
+            }
+        }
+
+        //如果没有二级菜单,
+        /**
+         * 添加二级资源的button
+         */
+        for (IResourceDTO secondMenu : secondLeveMenus) {
+            List<IResourceDTO> secondButtons = new ArrayList<>();
+            //如果buttons为空,则直接忽略
+            for (IResourceDTO button : buttons) {
+                //如果此button是二级菜单的附属按钮
+                if (button.getParentId().equals(secondMenu.getId())) {
+                    secondButtons.add(button);
+                }
+            }
+            secondMenu.setButtons(secondButtons);
+        }
+
+
+        /**
+         * 添加一级资源的子资源
+         */
+        for (IResourceDTO topMenu : topLevelMenus) {
+            List<IResourceDTO> secondMenus = new ArrayList<>();
+            for (IResourceDTO secondMenu : secondLeveMenus) {
+                //如果此button是二级菜单的附属按钮
+                if (secondMenu.getParentId().equals(topMenu.getId())) {
+                    secondMenus.add(secondMenu);
+                }
+            }
+            topMenu.setMenus(secondMenus);
+        }
+
+        return topLevelMenus;
+    }
+
+//    public static void main(String[] args) {
+//        List<IResource> iResourceList = new ArrayList<>();
+//        for(int i = 1; i<10; i++){
+//            IResource iResource  = new IResource();
+//            iResource.setSort(i);
+//            iResource.setName("资源名称 "+i);
+//            iResourceList.add(iResource);
+//
+//            System.out.println(iResource);
+//        }
+//        List<IResource> iResourceList2 = iResourceList
+//                .stream()
+//                .sorted((IResource r1,IResource r2) -> r1.getSort().compareTo(r2.getSort()))
+//                .collect(Collectors.toList());
+//
+//        System.out.println("========================");
+//        for (IResource iResource : iResourceList2) {
+//            System.out.println(iResource);
+//        }
+//    }
+
 }

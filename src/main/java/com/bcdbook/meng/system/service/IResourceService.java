@@ -1,7 +1,9 @@
 package com.bcdbook.meng.system.service;
 
+import com.bcdbook.meng.system.DTO.IResourceDTO;
 import com.bcdbook.meng.system.model.IResource;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,4 +19,12 @@ public interface IResourceService {
     IResource update(IResource iResource);
 
     boolean sort(Map<String,Integer> iResourceMap);
+
+    List<IResourceDTO> listAll();
+
+    List<IResourceDTO> listIResourceByIdList(List<String> iResourceIdList);
+
+    List<IResourceDTO> listAllAndChecked(List<String> iResourceIdList);
+
+    List<String> listIResourceIdByRoleIdList(List<String> roleList);
 }

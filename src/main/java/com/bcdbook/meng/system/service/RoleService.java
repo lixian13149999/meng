@@ -12,4 +12,5 @@ import java.util.List;
 public interface RoleService {
 
     List<Role> listRoleByUserId(String userId);
+
 }

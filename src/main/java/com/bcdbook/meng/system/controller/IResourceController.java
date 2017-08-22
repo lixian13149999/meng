@@ -6,9 +6,12 @@ import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.CommonException;
 import com.bcdbook.meng.common.result.Result;
 import com.bcdbook.meng.common.util.ResultUtil;
+import com.bcdbook.meng.system.DTO.IResourceDTO;
 import com.bcdbook.meng.system.form.IResourceForm;
 import com.bcdbook.meng.system.model.IResource;
+import com.bcdbook.meng.system.model.Role;
 import com.bcdbook.meng.system.service.IResourceService;
+import com.bcdbook.meng.system.service.RoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -21,9 +24,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @Author summer
@@ -37,6 +39,9 @@ public class IResourceController {
 
     @Autowired
     private IResourceService iResourceService;
+
+    @Autowired
+    private RoleService roleService;
 
     @PostMapping("/save")
     @ResponseBody
@@ -75,12 +80,36 @@ public class IResourceController {
         return null;
     }
 
+    @ResponseBody
     @GetMapping("/listAll")
-    public String listAll(){
+    public Result listAll(){
+        iResourceService.listAll();
         //- TODO 查询所有的菜单和按钮
-        return null;
+        return ResultUtil.success();
     }
 
+    @ResponseBody
+    @GetMapping("/authorization")
+    public Result authorization(@Valid String userId){
+        if (StringUtils.isEmpty(userId)){
+            throw new CommonException(ResultEnum.PARAM_IS_EMPTY);
+        }
+        //根据用户id获取角色集合
+        List<Role> roleList =  roleService.listRoleByUserId(userId);
+        //封装角色的id集合
+        List<String> roleIdList = roleList
+                .stream()
+                .map(e -> e.getId())
+                .collect(Collectors.toList());
+        //根据角色的id集合,获取资源的id集合
+        List<String> iResourceIdList = iResourceService.listIResourceIdByRoleIdList(roleIdList);
+        //去重
+        List<String> outIResourceIdList = new ArrayList<String>(new HashSet<String>(iResourceIdList));
+
+        List<IResourceDTO> iResourceDTOList = iResourceService.listIResourceByIdList(outIResourceIdList);
+
+        return ResultUtil.success(iResourceDTOList);
+    }
 
     @DeleteMapping("/delete/{id}")
     public String delete(){
