@@ -18,4 +18,11 @@ public interface UserRoleRepository extends JpaRepository<UserRole,UserRoleKey> 
      * 根据用户id,获取用户/角色列表
      */
     List<UserRole> findByUserRoleKey_UserId(String userId);
+
+    /**
+     * @param roleId
+     * @return
+     * 根据角色id, 获取用户/角色列表
+     */
+    List<UserRole> findByUserRoleKey_RoleId(String roleId);
 }

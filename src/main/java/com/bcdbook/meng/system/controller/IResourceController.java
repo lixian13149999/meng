@@ -1,11 +1,11 @@
 package com.bcdbook.meng.system.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.bcdbook.meng.common.constant.SwaggerTagsConstant;
 import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.CommonException;
 import com.bcdbook.meng.common.result.Result;
 import com.bcdbook.meng.common.util.ResultUtil;
+import com.bcdbook.meng.common.util.SortFormUtil;
 import com.bcdbook.meng.system.DTO.IResourceDTO;
 import com.bcdbook.meng.system.form.IResourceForm;
 import com.bcdbook.meng.system.model.IResource;
@@ -24,7 +24,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -151,15 +154,18 @@ public class IResourceController {
             return ResultUtil.success();
         }
 
-        //转字符串为list集合
-        List<HashMap> sortFormList = JSON.parseArray(sortForm, HashMap.class);
-        Map<String,Integer> sortFormMaps = new HashMap<String,Integer>();
-        //封装list为单个map集合,此过程可以过滤掉重复的值
-        for (Map<String,Integer> sortFormMap: sortFormList) {
-            for (String key:sortFormMap.keySet()) {
-                sortFormMaps.put(key,sortFormMap.get(key));
-            }
-        }
+//        //转字符串为list集合
+//        List<HashMap> sortFormList = JSON.parseArray(sortForm, HashMap.class);
+//        Map<String,Integer> sortFormMaps = new HashMap<String,Integer>();
+//        //封装list为单个map集合,此过程可以过滤掉重复的值
+//        for (Map<String,Integer> sortFormMap: sortFormList) {
+//            for (String key:sortFormMap.keySet()) {
+//                sortFormMaps.put(key,sortFormMap.get(key));
+//            }
+//        }
+
+        //解析传入的排序字符串,并封装成map集合
+        Map<String,Integer> sortFormMaps = SortFormUtil.parseSortForm(sortForm);
 
         //执行排序操作
         boolean result = iResourceService.sort(sortFormMaps);

@@ -1,10 +1,13 @@
 package com.bcdbook.meng.common.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bcdbook.meng.common.constant.CookieConstant;
 import com.bcdbook.meng.common.constant.RedisConstant;
+import com.bcdbook.meng.common.constant.SessionResourceConstant;
 import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.CommonException;
 import com.bcdbook.meng.common.util.CookieUtil;
+import com.bcdbook.meng.system.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,6 +29,26 @@ public class CommonRedisService {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    /**
+     * @author summer
+     * @date 2017/8/23 下午5:12
+     * @param request
+     * @return com.bcdbook.meng.system.model.User
+     * @description 一键获取在线用户的方法
+     */
+    public User getOnlineUser(HttpServletRequest request){
+
+        //自动获取在线用户对象(字符串)
+        String userStr = autoGet(request, SessionResourceConstant.ONLINE_USER);
+        Object userObj = JSONObject.parse(userStr);
+
+        User user = null;
+        if(userObj instanceof User){
+            user = (User) JSONObject.parse(userStr);
+        }
+
+        return user;
+    }
 
     /**
      * @author summer

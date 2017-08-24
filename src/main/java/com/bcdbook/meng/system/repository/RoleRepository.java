@@ -1,6 +1,7 @@
 package com.bcdbook.meng.system.repository;
 
 import com.bcdbook.meng.system.model.Role;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,4 +18,7 @@ public interface RoleRepository extends JpaRepository<Role,String> {
      */
     List<Role> findByIdIsIn(List<String> roleList);
 
+    List<Role> findAll();
+
+    List<Role> findAll(Sort sort);
 }

@@ -1,12 +1,19 @@
 package com.bcdbook.meng.system.model;
 
+import com.bcdbook.meng.common.util.serializer.Date2LongSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -72,18 +79,32 @@ public class Role implements Serializable {
     @Column(columnDefinition = "varchar(64) COMMENT '主键id'")
     private String id;//角色id
 
-    @Column(unique = true, nullable = false, columnDefinition = "varchar(32) COMMENT '角色名'")
+//    @ApiModelProperty(name = "userId", value = "用户id", example = "rtyvdvaeqgcfga", required = false)
+//    @Column(columnDefinition = "varchar(64) COMMENT '用户id,用来标注这个角色是属于谁的(一级用户的子角色),默认属于平台'")
+//    private String userId = LevelConstant.TOP_LEVEL;//用户id,用来标注这个角色是属于谁的(一级用户的子角色),默认属于平台
+
+    @NotNull(message = "角色名不能为空")
+    @NotEmpty(message = "角色名不能为空")
+    @Size(min=1,max = 64,message = "角色名称长度在1~64之间")
+    @ApiModelProperty(name = "name", value = "角色名称", example = "销售人员", required = true)
+    @Column(nullable = false, columnDefinition = "varchar(32) COMMENT '角色名'")
     private String name;//角色名
 
+    @ApiModelProperty(name = "intro", value = "简介", example = "这是销售人员的角色", required = false)
     @Column(columnDefinition = "varchar(64) COMMENT '简介'")
     private String intro;//简介
 
+    @NotNull(message = "排序值不能为空")
+    @Min(value = 0,message = "排序值不能小于0")
+    @ApiModelProperty(name = "sort", value = "排序值", example = "3", required = true)
     @Column(nullable = false, columnDefinition = "tinyint(3) DEFAULT 0 COMMENT '排序值'")
-    private Integer sort = 0;//排序值(表示当前角色的顺序)
+    private Integer sort = 1;//排序值(表示当前角色的顺序)
 
+    @JsonSerialize(using = Date2LongSerializer.class)
     @Column(nullable = false, columnDefinition = "timestamp DEFAULT current_timestamp COMMENT '创建时间'")
     private Date createTime;//创建时间
 
+    @JsonSerialize(using = Date2LongSerializer.class)
     @Column(nullable = false, columnDefinition = "timestamp DEFAULT current_timestamp on update current_timestamp COMMENT '修改时间'")
     private Date updateTime;//修改时间
 }

@@ -1,12 +1,8 @@
 package com.bcdbook.meng.system.model;
 
-import com.bcdbook.meng.common.constant.LevelConstant;
-import com.bcdbook.meng.common.util.serializer.Date2LongSerializer;
 import com.bcdbook.meng.system.enums.CertificationStatusEnum;
-import com.bcdbook.meng.system.enums.IsChildEnum;
 import com.bcdbook.meng.system.enums.UserStatusEnum;
 import com.bcdbook.meng.system.enums.UserTypeEnum;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -80,11 +76,6 @@ public class User implements Serializable {
     @Column(columnDefinition = "varchar(64) COMMENT '主键id'")
     private String id;//用户id
 
-
-    @Column(columnDefinition = "varchar(64) COMMENT '父级账号的id(如果不是子账户, 则为TOP_LEVEL)'")
-    private String parentId  = LevelConstant.TOP_LEVEL;//父级账号的id(如果不是子账户,则为空)
-
-
     @Column(unique = true, nullable = false, columnDefinition = "varchar(64) COMMENT '用户名'")
     private String username;//用户名
 
@@ -113,15 +104,10 @@ public class User implements Serializable {
     @Column(nullable = false, columnDefinition = "tinyint(3) DEFAULT '1' COMMENT '认证状态 默认1 未认证'")
     private Integer certificationStatus = CertificationStatusEnum.UNCERTIFIED.getCode();//认证状态
 
-    @Column(nullable = false, columnDefinition = "boolean  DEFAULT false COMMENT '是否是子账户 默认false 不是'")
-    private boolean isChild = IsChildEnum.FALSE.getStatus();//是否是子账户
 
-
-    @JsonSerialize(using = Date2LongSerializer.class)
     @Column(nullable = false, columnDefinition = "timestamp DEFAULT current_timestamp COMMENT '创建时间'")
     private Date createTime;//创建时间
 
-    @JsonSerialize(using = Date2LongSerializer.class)
     @Column(nullable = false, columnDefinition = "timestamp DEFAULT current_timestamp on update current_timestamp COMMENT '修改时间'")
     private Date updateTime;//修改时间
 

@@ -9,7 +9,9 @@ import com.bcdbook.meng.common.exception.CommonException;
 import com.bcdbook.meng.common.result.Result;
 import com.bcdbook.meng.common.service.CommonRedisService;
 import com.bcdbook.meng.common.util.CookieUtil;
+import com.bcdbook.meng.common.util.MD5Util;
 import com.bcdbook.meng.common.util.ResultUtil;
+import com.bcdbook.meng.system.DTO.UserDTO;
 import com.bcdbook.meng.system.form.LoginUserForm;
 import com.bcdbook.meng.system.model.User;
 import com.bcdbook.meng.system.service.UserService;
@@ -18,11 +20,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -101,8 +101,9 @@ public class CommonController {
          * 匹配数据库中的用户
          * 做mysql数据库的校验
          */
-        //- TODO 这里的密码没有加密,需要加密
-        User user = userService.findUserByUsernameAndUserPassword(loginUserForm.getUsername(),loginUserForm.getPassword());
+        String username = loginUserForm.getUsername();
+        String password = MD5Util.getMD5Code(loginUserForm.getPassword());
+        User user = userService.findByUsernameAndUserPassword(username,password);
         if(user==null){
             //- TODO 返回错误信息或跳转到错误页面
             log.warn("[用户登录] 用户名或密码不正确");
@@ -163,6 +164,47 @@ public class CommonController {
 
         return ResultUtil.success();
     }
+
+    @GetMapping("/signup")
+    @ApiOperation(value = "注册(获取页面)"
+            , notes = "获取注册页面的方法")
+    public String signUp(){
+        return null;
+    }
+
+    @PostMapping("/signup/username")
+    @ResponseBody
+    @ApiOperation(value = "注册(用户名+密码)"
+            , notes = "非后台用户注册的方法,用户名+密码")
+    public Result signUpWithUsername(@RequestParam String username, @RequestParam String password){
+        if(StringUtils.isEmpty(username)
+                ||StringUtils.isEmpty(password)){
+            throw new CommonException(ResultEnum.PARAM_IS_EMPTY.getCode(),"用户名或密码为空");
+        }
+
+        User dbUser =  userService.findByUsername(username);
+        if(dbUser!=null){
+            return ResultUtil.error(ResultEnum.DATA_IS_EXIST.getCode(),"用户名已经被使用");
+        }
+
+        User user = new User();
+        user.setUsername(username);
+        user.setUserPassword(MD5Util.getMD5Code(password));
+        user.setNickname(username);
+
+        UserDTO result = userService.save(user);
+
+        return ResultUtil.success(result);
+    }
+
+    @PostMapping("/signup/phone")
+    @ResponseBody
+    @ApiOperation(value = "注册(手机号+验证码)"
+            , notes = "非后台用户注册的方法,使用手机号和验证码的方式注册")
+    public Result signUpWithPhone(){
+        return null;
+    }
+
 
     @GetMapping
     @ResponseBody

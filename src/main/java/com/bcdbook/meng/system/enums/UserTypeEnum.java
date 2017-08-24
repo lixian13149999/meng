@@ -13,8 +13,8 @@ import lombok.Getter;
 public enum UserTypeEnum {
     ORDINARY_USER(1,"普通用户"),
     MERCHANT(2,"商家"),
-    SYSADMIN(10,"超级管理员"),
-    ADMIN(11,"普通管理员"),
+    ADMIN(10,"普通管理员"),
+    SYSADMIN(11,"超级管理员"),
     ;
 
     private Integer code;

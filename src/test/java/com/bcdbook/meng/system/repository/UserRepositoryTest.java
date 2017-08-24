@@ -46,7 +46,7 @@ public class UserRepositoryTest {
 
     @Test
     public void deleteTest(){
-        User user = userRepository.findUserByUsername("summer");
+        User user = userRepository.findByUsername("summer");
 
         userRepository.delete(user);
         log.info("[测试-删除用户]");
@@ -72,7 +72,7 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserByUsernameAndUserPasswordTest(){
-        User user = userRepository.findUserByUsernameAndUserPassword("summer","123321");
+        User user = userRepository.findByUsernameAndUserPassword("summer","123321");
         log.info(user.toString());
     }
 

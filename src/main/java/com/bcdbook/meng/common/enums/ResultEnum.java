@@ -25,6 +25,8 @@ public enum ResultEnum {
     FOREIGN_DATA_IS_EMPTY(503,"关联数据为空"),
     FOREIGN_DATA_ERROR(504,"关联资源不正确"),
     ID_IS_EMPTY(505,"id不能为空"),
+    DATA_IS_EXIST(506,"相关数据已存在"),
+    DATA_IS_USED(507,"数据被关联或被使用"),
 
     PERMISSION_DENIED(510,"没有权限"),
     COOKIE_EXPIRED(511,"cookie已过期或被禁用"),

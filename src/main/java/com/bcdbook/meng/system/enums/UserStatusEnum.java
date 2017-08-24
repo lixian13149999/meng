@@ -13,7 +13,9 @@ import lombok.Getter;
 public enum UserStatusEnum {
     NORMALITY(1,"正常状态"),
     BLOCK_UP(2,"停用"),
-    LOCKED(3,"锁定")
+    LOCKED(3,"锁定"),
+
+    PRE_REGISTRATION(4,"预注册状态")
     ;
 
     private Integer code;
