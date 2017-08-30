@@ -2,6 +2,8 @@ package com.bcdbook.meng.system.service;
 
 import com.bcdbook.meng.system.DTO.UserDTO;
 import com.bcdbook.meng.system.model.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -32,4 +34,6 @@ public interface UserService {
     User findByEmail(String email);
 
     List<String> listUserIdByRoleId(String roleId);
+
+    Page<UserDTO> listUserByUserType(Integer userType, Pageable pageable);
 }

@@ -5,6 +5,9 @@ import com.bcdbook.meng.system.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Created by 廖师兄
  * 2017-06-18 23:41
@@ -23,5 +26,11 @@ public class User2UserDTOConverter {
         User user = new User();
         BeanUtils.copyProperties(userDTO,user);
         return user;
+    }
+
+    public static List<UserDTO> convert(List<User> userList) {
+        return userList.stream()
+                .map(e -> convert(e))
+                .collect(Collectors.toList());
     }
 }

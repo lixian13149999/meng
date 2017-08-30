@@ -7,6 +7,7 @@ import com.bcdbook.meng.common.result.Result;
 import com.bcdbook.meng.common.util.MD5Util;
 import com.bcdbook.meng.common.util.ResultUtil;
 import com.bcdbook.meng.system.DTO.UserDTO;
+import com.bcdbook.meng.system.converter.User2UserDTOConverter;
 import com.bcdbook.meng.system.enums.CertificationStatusEnum;
 import com.bcdbook.meng.system.enums.UserStatusEnum;
 import com.bcdbook.meng.system.enums.UserTypeEnum;
@@ -18,6 +19,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -125,18 +129,6 @@ public class UserController {
             adminUserForm.setCertificationStatus(CertificationStatusEnum.UNCERTIFIED.getCode());
         }
 
-        /*
-         * 因为有些字段没有被传入,所以不能直接使用copy
-         */
-//        dbUser.setUsername(adminUserForm.getUsername());
-//        dbUser.setNickname(adminUserForm.getNickname());
-//        dbUser.setMobile(adminUserForm.getMobile());
-//        dbUser.setEmail(adminUserForm.getEmail());
-//
-//        dbUser.setUserType(adminUserForm.getUserType());
-//        dbUser.setUserStatus(adminUserForm.getUserStatus());
-//        dbUser.setCertificationStatus(adminUserForm.getCertificationStatus());
-
         BeanUtils.copyProperties(adminUserForm,dbUser);
 
         UserDTO result = userService.save(dbUser);
@@ -145,22 +137,41 @@ public class UserController {
 
     }
 
-    @GetMapping("/list/admin")
-    public String list(){
-        //- TODO 查询用户列表
-        return null;
+    /**
+     * @author summer
+     * @date 2017/8/24 下午8:08
+     * @param userType
+     * @param page
+     * @param size
+     * @return com.bcdbook.meng.common.result.Result
+     * @description
+     */
+    @GetMapping("/list/{userType}")
+    @ResponseBody
+    @ApiOperation(value = "查询用户列表"
+            , notes = "根据传入的用户类型,页码及每页的数据量,查询用户的page集合")
+    public Result list(@PathVariable Integer userType,
+                       @RequestParam(value = "page", defaultValue = "1") Integer page,
+                       @RequestParam(value = "size", defaultValue = "10") Integer size){
+
+        if(0==userType){
+            throw new CommonException(ResultEnum.PARAM_ERROR);
+        }
+        PageRequest pageRequest = new PageRequest(page - 1, size,new Sort(Sort.Direction.DESC,"updateTime"));
+        Page<UserDTO> userDTOList = userService.listUserByUserType(userType,pageRequest);
+
+        return ResultUtil.success(userDTOList);
     }
 
     @GetMapping("/get/{userId}")
-    public User getUser(@PathVariable String userId){
-        //- TODO 根据id查询用户的详细信息
-        return null;
-    }
-
-    @PutMapping("/update")
-    public String update() {
-        //- TODO 更新用户资料
-        return null;
+    @ResponseBody
+    @ApiOperation(value = "查询单个用户"
+            , notes = "根据用户id,查询单个用户")
+    public UserDTO getUser(@PathVariable String userId){
+        if(StringUtils.isEmpty(userId)){
+            throw new CommonException(ResultEnum.PARAM_IS_EMPTY);
+        }
+        return User2UserDTOConverter.convert(userService.findOne(userId));
     }
 
     @PostMapping("/changePassword")
@@ -170,7 +181,10 @@ public class UserController {
     }
 
     @PostMapping("/resetPassword")
-    public String resetPassword() {
+    @ResponseBody
+    @ApiOperation(value = "重置密码"
+            , notes = "根据用户id,重置用户的密码")
+    public String resetPassword(@PathVariable String userId) {
         //- TODO 重置密码
         return null;
     }

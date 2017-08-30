@@ -18,9 +18,6 @@ public class UserDTO {
 
     private String id;//用户id
 
-//    private String parentId  = LevelConstant.TOP_LEVEL;//父级账号的id(如果不是子账户,则为空)
-
-
     private String username;//用户名
 
 //    private String userPassword;//密码
@@ -39,8 +36,6 @@ public class UserDTO {
     private Integer userStatus = UserStatusEnum.NORMALITY.getCode();//用户状态(账号状态)
 
     private Integer certificationStatus = CertificationStatusEnum.UNCERTIFIED.getCode();//认证状态
-
-//    private boolean isChild = IsChildEnum.FALSE.getStatus();//是否是子账户
 
 
     @JsonSerialize(using = Date2LongSerializer.class)

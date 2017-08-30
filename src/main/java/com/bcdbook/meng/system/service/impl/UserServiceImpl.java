@@ -9,6 +9,9 @@ import com.bcdbook.meng.system.repository.UserRoleRepository;
 import com.bcdbook.meng.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -174,7 +177,27 @@ public class UserServiceImpl implements UserService {
         return userIdList;
     }
 
-//    @Override
+    /**
+     * @author summer
+     * @date 2017/8/24 下午7:12
+     * @param userType
+     * @param pageable
+     * @return java.util.List<com.bcdbook.meng.system.DTO.UserDTO>
+     * @description 根据用户类型获取用户集合
+     */
+    @Override
+    public Page<UserDTO> listUserByUserType(Integer userType, Pageable pageable) {
+        //分页查询user对象
+        Page<User> userPage = userRepository.findByUserType(userType,pageable);
+
+        //转换User对象为UserDTO
+        List<UserDTO> userDTOList = User2UserDTOConverter.convert(userPage.getContent());
+        Page<UserDTO> userDTOPage = new PageImpl<UserDTO>(userDTOList,pageable,userPage.getTotalElements());
+
+        return userDTOPage;
+    }
+
+    //    @Override
 //    public List<Role> listUserByRoleId(String roleId) {
 //        //根据用户id获取用户角色中间表对象的集合
 //        List<UserRole> userRoleList = userRoleRepository.findByUserRoleKey_RoleId(roleId);
