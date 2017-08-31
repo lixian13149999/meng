@@ -1,0 +1,116 @@
+@sidebar-width:180px;
+@topbar-heigth:80px;
+//@topbar-back-color:
+
+//主页面样式布局
+.view-framework{
+  //头部样式布局
+  .viewFramework-topbar{
+    position: fixed;
+    width: 100%;
+    height: @topbar-heigth;
+    background: @back-color;
+    z-index: 101;
+
+    .topbar-components{
+      position: relative;
+      z-index: 100;
+      clear: both;
+      height: @topbar-heigth;
+      //background: #373d41;
+      //font-size: 14px;
+      min-width: 990px;
+      color: @font-color-inverse;
+      //a{
+      //  color:@font-color-inverse;
+      //}
+    }
+
+    .topbar-head{
+      //background: #2a2f32;
+      height: @topbar-heigth;
+      position: relative;
+      z-index: 3;
+
+      .topbar-logo{
+        display: block;
+        line-height:@topbar-heigth;
+        height: @topbar-heigth;
+        color: @font-topbar-logo-color;
+        .transition(0.4s);
+        &:hover{
+          color:@font-color-inverse;
+        }
+
+        .topbar-logo-icon{
+          line-height: @topbar-heigth;
+          font-size: 56px;
+          margin-left: 30px;
+        }
+        .topbar-logo-name{
+          font-size: 26px;
+          margin-left: 18px;
+        }
+      }
+    }
+    .topbar-product{
+      padding: 0 20px;
+      display: inline-block;
+      height: @topbar-heigth;
+      cursor: pointer;
+      //background: #ccc;
+    }
+    .topbar-info{
+      //background: #2a2f32;
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+
+    .topbar-left{
+      float: left;
+    }
+    .topbar-right{
+      float: right;
+    }
+  }
+
+  //主显示区域样式布局
+  .viewFramework-body{
+    position: absolute;
+    width: 100%;
+    top: @topbar-heigth;
+    bottom: 0px;
+    //background-color: @product-back-color;
+    z-index: 100;
+
+    //侧边栏样式布局
+    .viewFramework-sidebar{
+      width: @sidebar-width;
+      display: block;
+
+      //width: 0px;
+      //display: none;
+      position: fixed;
+      top: @topbar-heigth;
+      bottom: 0px;
+      background-color: @back-color;
+      z-index: 102;
+      overflow-x: hidden;
+    }
+
+    //主显示区域样式
+    .viewFramework-product{
+      width: auto;
+      position: absolute;
+      top: 0px;
+      left: @sidebar-width;
+      bottom: 0px;
+      right: 0px;
+      overflow: hidden;
+      background: @product-back-color;
+    }
+  }
+}
