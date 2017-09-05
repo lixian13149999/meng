@@ -1,5 +1,12 @@
+@charset "utf-8";
+
+@import "common.less";
+
 @sidebar-width:180px;
 @topbar-heigth:80px;
+
+
+@topbar-user-photo-size:54px;
 //@topbar-back-color:
 
 //主页面样式布局
@@ -9,7 +16,7 @@
     position: fixed;
     width: 100%;
     height: @topbar-heigth;
-    background: @back-color;
+    background: @color-topbar-background;
     z-index: 101;
 
     .topbar-components{
@@ -17,13 +24,26 @@
       z-index: 100;
       clear: both;
       height: @topbar-heigth;
-      //background: #373d41;
-      //font-size: 14px;
       min-width: 990px;
-      color: @font-color-inverse;
-      //a{
-      //  color:@font-color-inverse;
-      //}
+      color: @color-font-inverse;
+      //border-bottom: solid @color-box-border 1px;
+      .topbar-info-dropdown{
+        //.transition(0.4s);
+        position: relative;
+        &:hover{
+          //background-color: #fff;
+          .dropdown-menu{
+            display: block;
+          }
+        }
+      }
+      .topbar-info-item{
+        display: inline-block;
+      }
+      .topbar-dropdown-menu{
+        left: unset;
+        right: 0;
+      }
     }
 
     .topbar-head{
@@ -36,10 +56,10 @@
         display: block;
         line-height:@topbar-heigth;
         height: @topbar-heigth;
-        color: @font-topbar-logo-color;
+        color: @color-topbar-logo;
         .transition(0.4s);
         &:hover{
-          color:@font-color-inverse;
+          color:@color-topbar-logo-active;
         }
 
         .topbar-logo-icon{
@@ -74,12 +94,38 @@
     }
     .topbar-right{
       float: right;
+      padding-right: 30px;
+      .topbar-user{
+        .topbar-info-dropdown{
+          height: @topbar-heigth;
+        }
+        .topbar-user-photo{
+          height: @topbar-user-photo-size;
+          width: @topbar-user-photo-size;
+          display: block;
+          border-radius: @topbar-user-photo-size/2;
+          margin-top: (@topbar-heigth - @topbar-user-photo-size)/2;
+          text-align: center;
+          background-repeat: no-repeat;
+          -moz-background-size: 100% 100%;
+          background-size: 100% 100%;
+        }
+        .topbar-user-dropdown-info{
+          top:@topbar-heigth;
+          margin: 0;
+          border-radius: 0;
+          box-shadow: none;
+          border: 0;
+          background-color: @color-topbar-background;
+        }
+
+      }
     }
   }
 
   //主显示区域样式布局
   .viewFramework-body{
-    position: absolute;
+    //position: absolute;
     width: 100%;
     top: @topbar-heigth;
     bottom: 0px;
@@ -90,27 +136,30 @@
     .viewFramework-sidebar{
       width: @sidebar-width;
       display: block;
+      //border-right: solid @color-box-border 1px;
 
       //width: 0px;
       //display: none;
       position: fixed;
       top: @topbar-heigth;
       bottom: 0px;
-      background-color: @back-color;
+      background-color: @color-sidebar-background;
       z-index: 102;
       overflow-x: hidden;
+
+      //border-right:solid @border-color 1px;
     }
 
     //主显示区域样式
     .viewFramework-product{
       width: auto;
       position: absolute;
-      top: 0px;
+      top: @topbar-heigth;
       left: @sidebar-width;
       bottom: 0px;
       right: 0px;
       overflow: hidden;
-      background: @product-back-color;
+      background: @color-product-background;
     }
   }
 }

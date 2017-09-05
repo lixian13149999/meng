@@ -1,10 +1,14 @@
+@charset "utf-8";
+
+//@import "./color"; //定义默认颜色
+
 body{
   margin: 0;
   padding: 0;
-
   font-family: "SF Pro SC","SF Pro Text","SF Pro Icons","PingFang SC","Helvetica Neue","Helvetica","Arial",sans-serif;
   //font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif;
   -webkit-font-smoothing: antialiased;
+  //.transition(0.4s);
 }
 
 ul{
@@ -21,13 +25,15 @@ li{
 
 a, a:hover ,a:visited, a:link, a:active{
   text-decoration: none;
-  color: @font-color;
+  color: @color-font-default;
+  text-overflow: ellipsis;
 }
 
 p{
   margin: 0;
   padding: 0;
 }
+
 //{
 //  //color: @font-color;
 //  text-decoration:none;

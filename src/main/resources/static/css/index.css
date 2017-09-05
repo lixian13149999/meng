@@ -1,7 +1,278 @@
-
-.index-main {
-    width: 900px;
-    height: 600px;
-    border: solid #ddd 1px;
-    margin: 80px auto 0px;
+@charset "utf-8";
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "SF Pro SC", "SF Pro Text", "SF Pro Icons", "PingFang SC", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+a,
+a:hover,
+a:visited,
+a:link,
+a:active {
+  text-decoration: none;
+  color: #333333;
+  text-overflow: ellipsis;
+}
+p {
+  margin: 0;
+  padding: 0;
+}
+.pull-left {
+  float: left!important;
+}
+.hover-primary:hover {
+  color: #1b9af7;
+}
+.modal-dialog {
+  margin-top: 120px;
+}
+.modal-content {
+  border-radius: 0;
+}
+.button {
+  font-weight: 400;
+}
+.form-error-msg {
+  position: absolute;
+  right: 25px;
+  top: 23%;
+  color: #ff4351;
+  display: none;
+}
+.has-error .control-label {
+  color: #ff4351;
+}
+.has-error .form-control {
+  border-color: #ff4351;
+}
+.has-error .form-error-msg {
+  display: block;
+}
+label {
+  font-weight: 500;
+}
+.form-control {
+  border-radius: 0px;
+  height: 38px;
+}
+/*!** =======================*/
+/** Contenedor Principal*/
+/*===========================*!*/
+/*h1 {*/
+/*color: #FFF;*/
+/*font-size: 24px;*/
+/*font-weight: 400;*/
+/*text-align: center;*/
+/*margin-top: 80px;*/
+/*}*/
+/*h1 a {*/
+/*!*color: #c12c42;*!*/
+/*font-size: 16px;*/
+/*}*/
+.viewFramework-sidebar {
+  /**
+     * Submenu
+     -----------------------------*/
+}
+.viewFramework-sidebar .accordion {
+  background-color: #404040;
+}
+.viewFramework-sidebar .accordion .link {
+  cursor: pointer;
+  display: block;
+  padding: 18px 18px 18px 48px;
+  font-weight: 500;
+  position: relative;
+  -webkit-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.viewFramework-sidebar .accordion .link a {
+  text-decoration: none;
+  color: #ffffff;
+}
+.viewFramework-sidebar .accordion li i {
+  position: absolute;
+  top: 8px;
+  left: 13px;
+  font-size: 26px;
+  color: #ffffff;
+  -webkit-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.viewFramework-sidebar .accordion li .link:hover {
+  background-color: #555555;
+}
+.viewFramework-sidebar .accordion li i.icon-tip-nav-title {
+  right: 12px;
+  top: 17px;
+  left: auto;
+  font-size: 16px;
+}
+.viewFramework-sidebar .accordion li.open i.icon-tip-nav-title {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.viewFramework-sidebar .accordion .submenu {
+  display: none;
+  background: #292929;
+  font-size: 14px;
+}
+.viewFramework-sidebar .accordion .submenu a {
+  display: block;
+  text-decoration: none;
+  color: #ffffff;
+  padding: 12px;
+  padding-left: 48px;
+  -webkit-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.viewFramework-sidebar .accordion .submenu a.active {
+  background-color: #555555;
+}
+.viewFramework-sidebar .accordion .submenu a:hover {
+  background-color: #555555;
+}
+ul.messenger.messenger-fixed.messenger-on-top {
+  top: 85px;
+}
+ul.messenger-theme-flat {
+  border-radius: 0px;
+}
+.view-framework .viewFramework-topbar {
+  position: fixed;
+  width: 100%;
+  height: 80px;
+  background: #292929;
+  z-index: 101;
+}
+.view-framework .viewFramework-topbar .topbar-components {
+  position: relative;
+  z-index: 100;
+  clear: both;
+  height: 80px;
+  min-width: 990px;
+  color: #eeeeee;
+}
+.view-framework .viewFramework-topbar .topbar-components .topbar-info-dropdown {
+  position: relative;
+}
+.view-framework .viewFramework-topbar .topbar-components .topbar-info-dropdown:hover .dropdown-menu {
+  display: block;
+}
+.view-framework .viewFramework-topbar .topbar-components .topbar-info-item {
+  display: inline-block;
+}
+.view-framework .viewFramework-topbar .topbar-components .topbar-dropdown-menu {
+  left: unset;
+  right: 0;
+}
+.view-framework .viewFramework-topbar .topbar-head {
+  height: 80px;
+  position: relative;
+  z-index: 3;
+}
+.view-framework .viewFramework-topbar .topbar-head .topbar-logo {
+  display: block;
+  line-height: 80px;
+  height: 80px;
+  color: #eeeeee;
+  -webkit-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+}
+.view-framework .viewFramework-topbar .topbar-head .topbar-logo:hover {
+  color: #ffffff;
+}
+.view-framework .viewFramework-topbar .topbar-head .topbar-logo .topbar-logo-icon {
+  line-height: 80px;
+  font-size: 56px;
+  margin-left: 30px;
+}
+.view-framework .viewFramework-topbar .topbar-head .topbar-logo .topbar-logo-name {
+  font-size: 26px;
+  margin-left: 18px;
+}
+.view-framework .viewFramework-topbar .topbar-product {
+  padding: 0 20px;
+  display: inline-block;
+  height: 80px;
+  cursor: pointer;
+}
+.view-framework .viewFramework-topbar .topbar-info {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+.view-framework .viewFramework-topbar .topbar-left {
+  float: left;
+}
+.view-framework .viewFramework-topbar .topbar-right {
+  float: right;
+  padding-right: 30px;
+}
+.view-framework .viewFramework-topbar .topbar-right .topbar-user .topbar-info-dropdown {
+  height: 80px;
+}
+.view-framework .viewFramework-topbar .topbar-right .topbar-user .topbar-user-photo {
+  height: 54px;
+  width: 54px;
+  display: block;
+  border-radius: 27px;
+  margin-top: 13px;
+  text-align: center;
+  background-repeat: no-repeat;
+  -moz-background-size: 100% 100%;
+  background-size: 100% 100%;
+}
+.view-framework .viewFramework-topbar .topbar-right .topbar-user .topbar-user-dropdown-info {
+  top: 80px;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  border: 0;
+  background-color: #292929;
+}
+.view-framework .viewFramework-body {
+  width: 100%;
+  top: 80px;
+  bottom: 0px;
+  z-index: 100;
+}
+.view-framework .viewFramework-body .viewFramework-sidebar {
+  width: 180px;
+  display: block;
+  position: fixed;
+  top: 80px;
+  bottom: 0px;
+  background-color: #292929;
+  z-index: 102;
+  overflow-x: hidden;
+}
+.view-framework .viewFramework-body .viewFramework-product {
+  width: auto;
+  position: absolute;
+  top: 80px;
+  left: 180px;
+  bottom: 0px;
+  right: 0px;
+  overflow: hidden;
+  background: #ffffff;
 }

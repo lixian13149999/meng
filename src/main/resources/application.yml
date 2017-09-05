@@ -27,6 +27,13 @@ spring:
       max-wait: -1
       max-idle: 8
       min-idle: 0
+
+  thymeleaf:
+    cache: false
+#    cache-period: 0
+#  template:
+#    cache: false
+
 common:
   parameters:
     check-login-authorize: false #是否执行登录拦截

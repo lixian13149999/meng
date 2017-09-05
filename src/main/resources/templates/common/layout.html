@@ -1,33 +1,131 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head th:fragment="htmlhead">
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="renderer" content="webkit" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <link rel="icon" href="/img/icon.ico" type="image/x-icon" />
-    <!--/*@thymesVar id="pagetitle" type="templates"*/-->
-    <title th:text="${pagetitle}">title</title>
-    <link rel="stylesheet" th:href="@{/libs/bootstrap/css/bootstrap.min.css}" />
 
-    <link rel="stylesheet" th:href="@{/css/login.css}" />
-    <link rel="stylesheet" th:href="@{/css/index.css}" />
+    <title th:text="${pagetitle}">title</title>
+
+    <!--<link rel="icon" type="image/x-icon" th:href="@{/static/img/favicon.ico}" />-->
+    <link rel="stylesheet" th:href="@{/static/libs/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/static/libs/bootstrap-buttons/buttons.css}" />
+    <link rel="stylesheet" th:href="@{/static/libs/messenger/css/messenger.css}" />
+    <link rel="stylesheet" th:href="@{/static/libs/messenger/css/messenger-theme-flat.css}" />
+
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_401994_lgtdr6obraiqkt9.css" />
+
+    <link rel="stylesheet" th:href="@{/static/libs/accordion/accordion.css}" />
+    <link rel="stylesheet" th:href="@{/static/css/index.css}" />
+
 </head>
 
 <body>
+<!--头部-->
+<div th:fragment="bodyhead">
+    <div class="topbar-components">
+        <div class="topbar-head topbar-left">
+            <a href="javascript:void(0)" class="topbar-logo">
+                <span class="iconfont icon-logo topbar-logo-icon topbar-left"></span>
+                <p class="topbar-logo-name topbar-left">项目控制台</p>
+            </a>
+        </div>
 
-    <scripts th:fragment="htmlscripts">
-        <script type="text/javascript" th:src="@{/libs/jquery/jquery.min.js}"></script>
-        <script type="text/javascript" th:src="@{/libs/bootstrap/js/bootstrap.min.js}"></script>
+        <div class="topbar-product topbar-left"></div>
 
-        <script type="text/javascript" th:src="@{/js/login.js}"></script>
-        <script type="text/javascript" th:src="@{/js/index.js}"></script>
-    </scripts>
+        <div class="topbar-info topbar-right">
+            <!--用户信息-->
+            <div class="pull-left topbar-user">
+                <div class="topbar-info-dropdown topbar-info-item">
+                    <!--<div class="dropdown">-->
+                    <!--<a class="topbar-user-photo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504250268656&di=365bd265291305bbeb78c0027046137f&imgtype=0&src=http%3A%2F%2Fp.3761.com%2Fpic%2F43701399945993.png')">-->
+                    <!--style="background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504250268656&di=365bd265291305bbeb78c0027046137f&imgtype=0&src=http%3A%2F%2Fp.3761.com%2Fpic%2F43701399945993.png');"-->
+                    <a class="topbar-user-photo">
+                        <!--Dropdown trigger-->
+                        <!--<span class="caret"></span>-->
+                    </a>
+                    <ul class="dropdown-menu topbar-dropdown-menu topbar-user-dropdown-info" aria-labelledby="dLabel">
+                        ...
+                        <li>1</li>
+                        <li>1</li>
+                        <li>1</li>
+                        <li>1</li>
+                    </ul>
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
 
+</div>
+
+<!--左侧菜单列表-->
+<div th:fragment="bodysidebar">
+    <ul id="sidebar_accordion" class="accordion">
+        <li>
+            <div class="link">
+                <i class="iconfont icon-logo"></i>
+                <a href="javascript:void(0)">系统模块</a>
+                <i class="iconfont icon-xiangyou icon-tip-nav-title"></i>
+            </div>
+            <ul class="submenu">
+                <li><a data-bar-herf="user" href="#" class="">管理员</a></li>
+                <li><a data-bar-herf="role" href="#">角色管理</a></li>
+                <li><a data-bar-herf="menu" href="#">菜单管理</a></li>
+                <li><a data-bar-herf="substation" href="#">分站设置</a></li>
+                <li><a data-bar-herf="app-user-mangant" href="#">用户管理</a></li>
+            </ul>
+        </li>
+        <li class="open">
+            <div class="link">
+                <i class="iconfont icon-approve"></i>
+                <a href="javascript:void(0)">系统支撑</a>
+                <i class="iconfont icon-xiangyou icon-tip-nav-title"></i></div>
+            <ul class="submenu" style="display: block">
+                <li><a data-bar-herf="notes" href="#">操作日志</a></li>
+                <li><a data-bar-herf="agreenment" href="#">协议管理</a></li>
+                <li><a class="active" data-bar-herf="weal" href="#">福利标签</a></li>
+                <li><a data-bar-herf="job" href="#">职位</a></li>
+            </ul>
+        </li>
+        <li>
+            <div class="link">
+                <i class="iconfont icon-logo"></i>
+                <a href="javascript:void(0)">通知</a>
+                <i class="iconfont icon-xiangyou icon-tip-nav-title"></i></div>
+            <ul class="submenu">
+                <li><a data-bar-herf="system-notice" href="#">系统通知</a></li>
+            </ul>
+        </li>
+        <li>
+            <div class="link">
+                <i class="iconfont icon-logo"></i>
+                <a href="javascript:void(0)">厂商信息</a>
+                <i class="iconfont icon-xiangyou icon-tip-nav-title"></i>
+            </div>
+            <ul class="submenu">
+                <li><a data-bar-herf="company-mangant" href="#">公司管理</a></li>
+                <li><a data-bar-herf="company-recruit" href="#">招聘信息</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<scripts th:fragment="htmlscripts">
+    <script type="text/javascript" th:src="@{/static/libs/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/libs/bootstrap/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/libs/messenger/js/messenger.min.js}"></script>
+
+    <script type="text/javascript" th:src="@{/static/libs/accordion/accordion.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/common/topbar.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/util/imessenger.js}"></script>
+
+</scripts>
 </body>
 
 </html>

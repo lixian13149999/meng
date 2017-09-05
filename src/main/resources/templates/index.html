@@ -10,14 +10,19 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <link rel="icon" href="../static/img/logo.ico" type="image/x-icon" />
+    <link rel="icon" href="../static/img/favicon.ico" type="image/x-icon" />
 
     <!--<link rel="stylesheet/less" href="../static/libs/accordion/accordion.less" />-->
 
     <link rel="stylesheet" href="../static/libs/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../static/libs/bootstrap-buttons/buttons.css" />
+    <link rel="stylesheet" href="../static/libs/messenger/css/messenger.css" />
+    <link rel="stylesheet" href="../static/libs/messenger/css/messenger-theme-flat.css" />
+
     <link rel="stylesheet" href="//at.alicdn.com/t/font_401994_lgtdr6obraiqkt9.css" />
 
-    <link rel="stylesheet/less" href="../static/css/common.less" />
+    <link rel="stylesheet/less" href="../static/libs/accordion/accordion.less" />
+    <link rel="stylesheet/less" href="../static/css/index.less" />
 
 </head>
 <body>
@@ -33,9 +38,29 @@
                     </a>
                 </div>
 
-                <div class="topbar-product topbar-left">产品中间区域</div>
+                <div class="topbar-product topbar-left"></div>
 
-                <div class="topbar-info topbar-right">右侧区域</div>
+                <div class="topbar-info topbar-right">
+                    <!--用户信息-->
+                    <div class="pull-left topbar-user">
+                        <div class="topbar-info-dropdown topbar-info-item">
+                            <!--<div class="dropdown">-->
+                                <!--<a class="topbar-user-photo" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504250268656&di=365bd265291305bbeb78c0027046137f&imgtype=0&src=http%3A%2F%2Fp.3761.com%2Fpic%2F43701399945993.png')">-->
+                            <a class="topbar-user-photo" style="background-image: url('https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1504250268656&di=365bd265291305bbeb78c0027046137f&imgtype=0&src=http%3A%2F%2Fp.3761.com%2Fpic%2F43701399945993.png')">
+                                    <!--Dropdown trigger-->
+                                    <!--<span class="caret"></span>-->
+                                </a>
+                                <ul class="dropdown-menu topbar-dropdown-menu topbar-user-dropdown-info" aria-labelledby="dLabel">
+                                    ...
+                                    <li>1</li>
+                                    <li>1</li>
+                                    <li>1</li>
+                                    <li>1</li>
+                                </ul>
+                            <!--</div>-->
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -95,14 +120,81 @@
             </div>
 
             <!--右侧主显示区域-->
-            <div class="viewFramework-product"></div>
+            <div class="viewFramework-product">
+                <button type="button" class="button button-primary" data-toggle="modal" data-target="#myModal">
+                    Launch demo modal
+                </button>
+                
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                            <span class="form-error-msg">这是错误信息</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                            <span class="form-error-msg">这是错误信息</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Remember me
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" onclick="testMsg('测试错误信息')" class="button">Sign in</button>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script type="text/javascript" src="../static/libs/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../static/libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/libs/messenger/js/messenger.min.js"></script>
+
     <script type="text/javascript" src="../static/libs/accordion/accordion.js"></script>
+    <script type="text/javascript" src="../static/js/common/topbar.js"></script>
+    <script type="text/javascript" src="../static/js/util/imessenger.js"></script>
 
     <script type="text/javascript" src="../static/libs/less/less.min.js"></script>
+
+<script type="text/javascript">
+    function testMsg(text) {
+        imessenger.error(text);
+    }
+</script>
 </body>
 </html>

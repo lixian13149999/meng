@@ -191,8 +191,7 @@ public class UserController {
 
 
     @GetMapping
-    @ResponseBody
     public String test(){
-        return "success";
+        return "/system/user-list";
     }
 }

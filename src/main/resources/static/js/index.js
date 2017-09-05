@@ -28,3 +28,4 @@ index.inputPage = function () {
         $("#index-main").html(data);
     }
 }
+
