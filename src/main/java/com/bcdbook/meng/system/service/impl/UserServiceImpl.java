@@ -12,9 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -181,14 +187,43 @@ public class UserServiceImpl implements UserService {
      * @author summer
      * @date 2017/8/24 下午7:12
      * @param userType
+     * @param parameter
      * @param pageable
      * @return java.util.List<com.bcdbook.meng.system.DTO.UserDTO>
-     * @description 根据用户类型获取用户集合
+     * @description 根据用户类型,用户的关键字段(用户名/昵称/手机号)获取用户集合
      */
     @Override
-    public Page<UserDTO> listUserByUserType(Integer userType, Pageable pageable) {
+    public Page<UserDTO> listUserByUserTypeAndKey(Integer userType, String parameter, Pageable pageable) {
         //分页查询user对象
-        Page<User> userPage = userRepository.findByUserType(userType,pageable);
+        Page<User> userPage = null;
+
+        //如果不传入参数,则直接根据用类型进行分类查询,
+        //如果传入参数,则封装参数进行模糊匹配
+        if(StringUtils.isEmpty(parameter)){
+            //分页查询user对象
+            userPage = userRepository.findByUserType(userType,pageable);
+        }else{
+            //封装用户类型的查询条件
+            Specification<User> userTypeSpecification = new Specification<User>() {
+                @Override
+                public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                    return criteriaBuilder.equal(root.get("userType"),userType);
+                }
+            };
+            //封装关键字参数的查询条件
+            Specification<User> parameterSpacifiction = new Specification<User>(){
+                @Override
+                public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                    Predicate preUsername = criteriaBuilder.like(root.get("username"),"%"+parameter+"%");
+                    Predicate preNickname = criteriaBuilder.like(root.get("nickname"),"%"+parameter+"%");
+                    Predicate preMobile = criteriaBuilder.like(root.get("mobile"),"%"+parameter+"%");
+
+                    return criteriaBuilder.or(preUsername,preNickname,preMobile);
+                }
+            };
+            //执行带关键字参数的高级查询
+            userPage =  userRepository.findAll(Specifications.where(userTypeSpecification).and(parameterSpacifiction),pageable);
+        }
 
         //转换User对象为UserDTO
         List<UserDTO> userDTOList = User2UserDTOConverter.convert(userPage.getContent());
@@ -197,27 +232,4 @@ public class UserServiceImpl implements UserService {
         return userDTOPage;
     }
 
-    //    @Override
-//    public List<Role> listUserByRoleId(String roleId) {
-//        //根据用户id获取用户角色中间表对象的集合
-//        List<UserRole> userRoleList = userRoleRepository.findByUserRoleKey_RoleId(roleId);
-//        //判断集合的合法性, 为空则直接返回空
-//        if(userRoleList==null||userRoleList.isEmpty()){
-//            return null;
-//        }
-//
-//        //根据获取到的中间对象的结合, 封装一个角色id的集合对象
-//        List<String> roleIdList = userRoleList
-//                .stream()
-//                .map(
-//                        e -> e.getUserRoleKey().getRoleId()
-//                )
-//                .collect(
-//                        Collectors.toList()
-//                );
-//        //根据角色id集合,获取角色对象集合
-//        List<Role> roleList = roleRepository.findByIdIsIn(roleIdList);
-//
-//        return roleList;
-//    }
 }

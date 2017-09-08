@@ -1,0 +1,38 @@
+@title-bar-height: 45px;
+
+.title-bar{
+  height: @title-bar-height;
+  //background-color: #eee;
+  //border-left: solid #444 4px;
+  border-bottom: solid @color-box-border 1px;
+  padding: 0px 15px;
+
+  .title-bar-text{
+    line-height: @title-bar-height;
+    font-size: 16px;
+    font-weight: 500;
+    //color:@color-font-tint;
+  }
+}
+
+.table-box{
+  margin-top: 20px;
+}
+
+.page-box{
+  text-align: center;
+}
+
+.title-search-box {
+  width: 320px;
+  position: relative;
+  right: -15px;
+  float: right;
+  .title-search-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 14px;
+    padding: 0 32px;
+  }
+}

@@ -1,5 +1,4 @@
 @charset "utf-8";
-
 @import "common.less";
 
 @sidebar-width:180px;
@@ -146,6 +145,7 @@
       background-color: @color-sidebar-background;
       z-index: 102;
       overflow-x: hidden;
+      overflow-y:scroll;
 
       //border-right:solid @border-color 1px;
     }
@@ -160,6 +160,7 @@
       right: 0px;
       overflow: hidden;
       background: @color-product-background;
+      overflow-y:scroll;
     }
   }
 }

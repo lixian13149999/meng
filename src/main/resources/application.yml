@@ -39,7 +39,9 @@ common:
     check-login-authorize: false #是否执行登录拦截
     take-request-sql-log: false #是否记录请求日志到mysql数据库
     take-request-log-back: false #是否记录请求日志到logback文件
-
+  page:
+      defaultPage: 1 #默认页码
+      defaultSize: 10 #默认每页显示数量
 
 #my:
 #  redis:

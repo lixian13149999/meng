@@ -1,4 +1,7 @@
 @charset "utf-8";
+.font {
+  font-weight: 100;
+}
 body {
   margin: 0;
   padding: 0;
@@ -39,6 +42,10 @@ p {
 }
 .modal-content {
   border-radius: 0;
+}
+.modal-header h4 {
+  font-size: 16px;
+  font-weight: 400;
 }
 .button {
   font-weight: 400;

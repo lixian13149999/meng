@@ -28,7 +28,7 @@ public class UserRepositoryTest {
     @Test
     public void saveTest(){
         User user = new User();
-        user.setUsername("summer2");
+        user.setUsername("summer11");
         user.setUserPassword("123321");
 //        user.setCertificationStatus(1);
 //        user.setUserStatus(2);
@@ -36,7 +36,7 @@ public class UserRepositoryTest {
         Assert.assertNotNull(result);
 
         User user2 = new User();
-        user2.setUsername("summer3");
+        user2.setUsername("summer12");
         user2.setUserPassword("123321");
 //        user.setCertificationStatus(1);
 //        user.setUserStatus(2);
@@ -90,4 +90,68 @@ public class UserRepositoryTest {
         Assert.assertNotNull(userPage);
     }
 
+    @Test
+    public void findByUserTypeAndUsernameLike(){
+        PageRequest pageRequest = new PageRequest(0, 20,new Sort(Sort.Direction.DESC,"updateTime"));
+//        Page<User> userPage = userRepository.findByUserTypeAndUsernameLike(1, "", pageRequest);
+
+//        Assert.assertNotNull(userPage);
+    }
+
+    @Test
+    public void findByUserTypeAndParameterTest(){
+//        Page<User> userPage = userRepository.findByUserTypeAndUsernameLikeOrNicknameLikeOrMobileLike(1,"%summer%","%summer%","%summer%",pageRequest);
+//        PageRequest pageRequest = new PageRequest(0, 20,new Sort(Sort.Direction.DESC,"updateTime"));
+//        Integer userType = 1;
+//        String parameter = "summer";
+//
+//        Specification<User> userTypeSpecification = new Specification<User>() {
+//            @Override
+//            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+//                return criteriaBuilder.equal(root.get("userType"),userType);
+//            }
+//        };
+//
+//        Specification<User> parameterSpacifiction = new Specification<User>(){
+//            @Override
+//            public Predicate toPredicate(Root<User> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+//                Predicate preUsername = criteriaBuilder.like(root.get("username"),"%"+parameter+"%");
+//                Predicate preNickname = criteriaBuilder.like(root.get("nickname"),"%"+parameter+"%");
+//                Predicate preMobile = criteriaBuilder.like(root.get("mobile"),"%"+parameter+"%");
+//
+//                return criteriaBuilder.or(preUsername,preNickname,preMobile);
+//            }
+//        };
+////        Assert.assertNotNull(userPage);
+//        Page<User> userPage =  userRepository.findAll(Specifications.where(userTypeSpecification).and(parameterSpacifiction),pageRequest);
+//
+//        Assert.assertNotNull(userPage);
+    }
+
+//    @Test
+//    public void testSpecificaiton2() {
+//        //第一个Specification定义了两个or的组合
+//        Specification<Student> s1 = new Specification<Student>() {
+//            @Override
+//            public Predicate toPredicate(Root<Student> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+//                Predicate p1 = criteriaBuilder.equal(root.get("id"),"2");
+//                Predicate p2 = criteriaBuilder.equal(root.get("id"),"3");
+//                return criteriaBuilder.or(p1,p2);
+//            }
+//        };
+//        //第二个Specification定义了两个or的组合
+//        Specification<Student> s2 = new Specification<Student>() {
+//            @Override
+//            public Predicate toPredicate(Root<Student> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+//                Predicate p1 = criteriaBuilder.like(root.get("address"),"zt%");
+//                Predicate p2 = criteriaBuilder.like(root.get("name"),"foo%");
+//                return criteriaBuilder.or(p1,p2);
+//            }
+//        };
+//        //通过Specifications将两个Specification连接起来，第一个条件加where，第二个是and
+//        List<Student> stus = studentSpecificationRepository.findAll(Specifications.where(s1).and(s2));
+//
+//        Assert.assertEquals(1,stus.size());
+//        Assert.assertEquals(3,stus.get(0).getId());
+//    }
 }

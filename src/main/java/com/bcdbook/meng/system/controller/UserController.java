@@ -1,5 +1,6 @@
 package com.bcdbook.meng.system.controller;
 
+import com.bcdbook.meng.common.constant.PageConstant;
 import com.bcdbook.meng.common.constant.SwaggerTagsConstant;
 import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.CommonException;
@@ -23,10 +24,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
@@ -143,24 +146,40 @@ public class UserController {
      * @param userType
      * @param page
      * @param size
+     * @param parameter
      * @return com.bcdbook.meng.common.result.Result
      * @description
      */
     @GetMapping("/list/{userType}")
-    @ResponseBody
+//    @ResponseBody
     @ApiOperation(value = "查询用户列表"
             , notes = "根据传入的用户类型,页码及每页的数据量,查询用户的page集合")
-    public Result list(@PathVariable Integer userType,
-                       @RequestParam(value = "page", defaultValue = "1") Integer page,
-                       @RequestParam(value = "size", defaultValue = "10") Integer size){
+    public String list(ModelMap map,
+                       @PathVariable Integer userType,
+                       @RequestParam(value = "page", defaultValue = PageConstant.PAGE) Integer page,
+                       @RequestParam(value = "size", defaultValue = PageConstant.SIZE) Integer size,
+                       @RequestParam(value = "parameter", defaultValue = "") String parameter,
+                       HttpServletRequest request){
 
         if(0==userType){
             throw new CommonException(ResultEnum.PARAM_ERROR);
         }
         PageRequest pageRequest = new PageRequest(page - 1, size,new Sort(Sort.Direction.DESC,"updateTime"));
-        Page<UserDTO> userDTOList = userService.listUserByUserType(userType,pageRequest);
+        Page<UserDTO> userDTOList = userService.listUserByUserTypeAndKey(userType, parameter, pageRequest);
 
-        return ResultUtil.success(userDTOList);
+        /*
+         * 设置路径程序的相关路径
+         */
+        String requestURL = request.getRequestURI();
+        String pageHrefPrefix = requestURL + (StringUtils.isEmpty(parameter) ? "" : ("?parameter="+parameter));
+        map.addAttribute("pageHrefPrefix",pageHrefPrefix);
+        map.addAttribute("requestURL",request.getRequestURI());
+
+        //设置返回值
+        map.addAttribute("userPage",userDTOList);
+        map.addAttribute("parameter",parameter);
+
+        return "/system/user-list";
     }
 
     @GetMapping("/get/{userId}")

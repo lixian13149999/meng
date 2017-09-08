@@ -1,0 +1,58 @@
+.pagination {
+  > li {
+    > a, >span {
+      padding: 9px 18px;
+      color: @color-font-tint;
+
+      &:hover {
+        color: @color-font-default;
+        background-color: @color-page-item-background;
+      }
+    }
+    &:first-child{
+      >a,>span{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+    }
+    &:last-child{
+      >a,>span{
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+    }
+  }
+
+  >.active {
+    >a,>span{
+      color:@color-font-default;
+      background-color: @color-page-item-background;
+      border-color:@color-box-border;
+      &:focus,&:hover{
+        color:@color-font-default;
+        background-color: @color-page-item-background;
+        border-color:@color-box-border;
+      }
+    }
+  }
+  .iconfont{
+    font-size: 14px;
+  }
+}
+//
+//  .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+//    color:@color-font-default;
+//    background-color: @color-page-item-background;
+//    border-color:@color-box-border;
+//  }
+//
+//  .pagination>li:first-child>a, .pagination>li:first-child>span{
+//    border-top-left-radius: 0px;
+//    border-bottom-left-radius: 0px;
+//  }
+//
+//  .pagination>li:last-child>a, .pagination>li:last-child>span{
+//    border-top-right-radius: 0px;
+//    border-bottom-right-radius: 0px;
+//  }
+//}

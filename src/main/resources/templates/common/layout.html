@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="htmlhead">
     <meta charset="UTF-8" />
 
@@ -18,10 +18,10 @@
     <link rel="stylesheet" th:href="@{/static/libs/messenger/css/messenger.css}" />
     <link rel="stylesheet" th:href="@{/static/libs/messenger/css/messenger-theme-flat.css}" />
 
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_401994_lgtdr6obraiqkt9.css" />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_401994_9heanfm850sbgldi.css" />
 
-    <link rel="stylesheet" th:href="@{/static/libs/accordion/accordion.css}" />
-    <link rel="stylesheet" th:href="@{/static/css/index.css}" />
+    <link rel="stylesheet/less" th:href="@{/static/libs/accordion/accordion.less}" />
+    <link rel="stylesheet/less" th:href="@{/static/css/index.less}" />
 
 </head>
 
@@ -115,6 +115,99 @@
         </li>
     </ul>
 </div>
+
+<!--page start-->
+<div th:fragment="modulepage">
+    <!--map.addAttribute("page",userDTOList.getNumber());//获取当前页码-->
+    <!--map.addAttribute("total",userDTOList.getTotalElements());//获取数据总量-->
+    <!--map.addAttribute("totalPages",userDTOList.getTotalPages());//获取总页数-->
+    <!--map.addAttribute("isFirst",userDTOList.isFirst());//是否是第一页-->
+    <!--map.addAttribute("isLast",userDTOList.isLast());//是否是最后一页pageParameters.number-->
+
+    <nav aria-label="Page navigation"  th:with="totalPages = ((${pageParameters.totalPages} le 0) ? 1 : ${pageParameters.totalPages}),
+        pageIndex = ${pageParameters.number+1},
+        isFirst = ${pageParameters.first},
+        isLast = ${pageParameters.last}">
+        <ul class="pagination">
+            <!--上一页-->
+            <li class="" th:classappend="${isFirst} ? 'disabled' : ''">
+                <!--如果当前是首页,则直接定位成第一页, 如果当前不是第一页,则定位到当前页的上一页-->
+                <a th:href="${isFirst} ? @{${pageHrefPrefix}(${pageHrefParaName}=1)} : @{${pageHrefPrefix}(${pageHrefParaName}=${pageParameters.number})}" class="iconfont icon-previous-page">
+                    <!--<span aria-hidden="true" class="iconfont icon-previous-page"></span>-->
+                </a>
+            </li>
+
+            <!--分页分情况展示-开始-->
+            <!--分页数量小于或等于7时-->
+            <li class="" th:if="${(totalPages) le 7}"
+                data-th-each="i : ${#numbers.sequence(1, totalPages)}"
+                data-th-classappend="${pageIndex eq i} ? 'active' : ''">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${i})}" th:text="${i}"></a>
+            </li>
+
+            <!--页面数量大于7, 当前页码小于等于4-->
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex le 4)}"
+                data-th-each="i : ${#numbers.sequence(1, 5)}"
+                data-th-classappend="${pageIndex eq i} ? 'active' : ''">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${i})}" th:text="${i}"></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex le 4)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${totalPages} - 1)}" th:text="..."></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex le 4)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${totalPages})}" th:text="${totalPages}"></a>
+            </li>
+
+            <!--页面数量大于7, 当前页码距离最后一页小于等于2-->
+            <li class="" th:if="${((totalPages) gt 7) and ((totalPages - pageIndex) le 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = 1)}" th:text="1"></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and ((totalPages - pageIndex) le 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = 2)}" th:text="..."></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and ((totalPages - pageIndex) le 2)}"
+                data-th-each="i : ${#numbers.sequence(totalPages - 3, totalPages)}"
+                data-th-classappend="${pageIndex eq i} ? 'active' : ''">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${i})}" th:text="${i}"></a>
+            </li>
+
+            <!--页面数量大于7, 当前页码大于4, 同时当前页码距最后一页大于2-->
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = 1)}" th:text="1"></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = 2)}" th:text="..."></a>
+            </li>
+
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${pageIndex} - 1)}" th:text="${pageIndex} - 1"></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}"
+                th:classappend="active">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${pageIndex})}" th:text="${pageIndex}"></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${pageIndex} + 1)}" th:text="${pageIndex} + 1"></a>
+            </li>
+
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${totalPages} - 1)}" th:text="..."></a>
+            </li>
+            <li class="" th:if="${((totalPages) gt 7) and (pageIndex gt 4) and ((totalPages - pageIndex) gt 2)}">
+                <a th:href="@{${pageHrefPrefix}(${pageHrefParaName} = ${totalPages})}" th:text="${totalPages}"></a>
+            </li>
+            <!--分页分情况展示-结束-->
+
+            <!--下一页-->
+            <li class="" data-th-classappend="${isLast} ? 'disabled' : ''">
+                <a th:href="${isLast} ? @{${pageHrefPrefix}(${pageHrefParaName}=${totalPages})} : @{${pageHrefPrefix}(${pageHrefParaName}=${pageIndex} + 1)}" class="iconfont icon-next-page">
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<!--page-end-->
+
 
 <scripts th:fragment="htmlscripts">
     <script type="text/javascript" th:src="@{/static/libs/jquery/jquery.min.js}"></script>

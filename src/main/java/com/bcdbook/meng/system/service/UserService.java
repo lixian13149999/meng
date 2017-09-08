@@ -35,5 +35,5 @@ public interface UserService {
 
     List<String> listUserIdByRoleId(String roleId);
 
-    Page<UserDTO> listUserByUserType(Integer userType, Pageable pageable);
+    Page<UserDTO> listUserByUserTypeAndKey(Integer userType,String parameter, Pageable pageable);
 }
