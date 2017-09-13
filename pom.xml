@@ -71,6 +71,12 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- SpringWebSocket依赖 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
 		<!--
 			dd的jar包,在swagger2正常使用的前提下
 			用于简化swagger的使用和配置

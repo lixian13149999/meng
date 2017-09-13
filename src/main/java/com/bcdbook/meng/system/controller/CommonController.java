@@ -219,9 +219,9 @@ public class CommonController {
 
         return "success";
     }
-    @GetMapping("/input")
+    @GetMapping("/socket")
     public String getInput(){
-        return "input";
+        return "/common/chart";
     }
     @GetMapping("/index")
     public String getIndex(){
