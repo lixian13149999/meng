@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,8 +37,16 @@ public class IResourceServiceImpl implements IResourceService {
     @Autowired
     private RoleIResourceRepository roleIResourceRepository;
 
+    /**
+     * @author summer
+     * @date 2017/9/13 下午8:38
+     * @param iResourceId
+     * @return com.bcdbook.meng.system.model.IResource
+     * @description 根据资源集合id查询资源对象
+     */
     @Override
     public IResource findOne(String iResourceId) {
+
         return StringUtils.isEmpty(iResourceId)? null : iResourceRepository.findOne(iResourceId);
     }
 
@@ -87,6 +96,9 @@ public class IResourceServiceImpl implements IResourceService {
      * @param iResource
      * @return com.bcdbook.meng.system.model.IResource
      * @description 修改资源的方法
+     * 1. 资源类型不允许发生变化
+     * 2. 资源级别发生变化时,父级资源不允许为空
+     * 3. 父级资源不允许是按钮类型
      */
     @Override
     @Transactional
@@ -188,7 +200,7 @@ public class IResourceServiceImpl implements IResourceService {
      * @date 2017/8/21 下午8:20
      * @param
      * @return java.util.List<com.bcdbook.meng.system.model.IResource>
-     * @description 查询所有的资源集合
+     * @description 查询所有的资源集合,做结构化处理
      */
     @Override
     public List<IResourceDTO> listAll() {
@@ -217,7 +229,7 @@ public class IResourceServiceImpl implements IResourceService {
      * @date 2017/8/22 下午1:45
      * @param iResourceIdList
      * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
-     * @description 根据资源集合,获取相关资源对象(菜单)
+     * @description 根据资源的id集合,获取相关资源对象(菜单),未序列化
      */
     @Override
     public List<IResourceDTO> listIResourceByIdList(List<String> iResourceIdList) {
@@ -238,7 +250,7 @@ public class IResourceServiceImpl implements IResourceService {
     /**
      * @author summer
      * @date 2017/8/22 下午2:23
-     * @param iResourceIdList
+     * @param iResourceIdList 为已经拥有的资源id集合
      * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
      * @description 查询出所有的资源对象,并标注出传入id集合的资源对象
      */
@@ -269,24 +281,66 @@ public class IResourceServiceImpl implements IResourceService {
             }
         }
 
-        //执行封装
+        //执行父子级序列化封装
         List<IResourceDTO> parseList = parseList(allIResourceDTOList);
 
         return parseList;
     }
 
+    /**
+     * @author summer
+     * @date 2017/9/13 下午8:43
+     * @param rolesIdList
+     * @return java.util.List<java.lang.String>
+     * @description 根据角色的id集合,查询出其含有的资源的id集合,并去重
+     */
     @Override
-    public List<String> listIResourceIdByRoleIdList(List<String> roleList) {
-        if(roleList==null||roleList.size()<=0){
+    public List<String> listIResourceIdByRoleIdList(List<String> rolesIdList) {
+        //参数合法性校验
+        if(rolesIdList==null||rolesIdList.size()<=0){
             return null;
         }
-        List<RoleIResource> roleIResourceList = roleIResourceRepository.findByRoleIResourceKey_RoleIdIn(roleList);
+        //根据角色的id集合,查询出对应的资源的id集合
+        List<RoleIResource> roleIResourceList = roleIResourceRepository.findByRoleIResourceKey_RoleIdIn(rolesIdList);
         List<String> iResourceIdList = roleIResourceList
                 .stream()
                 .map(e -> e.getRoleIResourceKey().getIResourceId())
                 .collect(Collectors.toList());
 
-        return iResourceIdList;
+        //去重
+        List<String> outIResourceIdList = new ArrayList<String>(new HashSet<String>(iResourceIdList));
+
+        return outIResourceIdList;
+    }
+
+    /**
+     * @author summer
+     * @date 2017/9/13 下午9:04
+     * @param roleIdList
+     * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
+     * @description 根据角色的id集合,查询其对应的资源集合,并进行序列化封装
+     */
+    @Override
+    public List<IResourceDTO> listIResourceByRoleIdList(List<String> roleIdList) {
+        //参数合法性校验
+        if(roleIdList==null||roleIdList.size()<=0){
+            return null;
+        }
+
+        //获取资源的id集合
+        List<String> iresourceIdList = listIResourceIdByRoleIdList(roleIdList);
+
+        //根据资源id集合,查询对应的资源对象
+        List<IResourceDTO> iResourceDTOList = (iresourceIdList==null||iresourceIdList.size()<=0)
+                ? null
+                : listIResourceByIdList(iresourceIdList);
+
+        //对查询出的资源对象进行序列化处理
+        List<IResourceDTO> iResourceDTOListParsed = (iResourceDTOList==null||iResourceDTOList.size()<=0)
+                ? null
+                : parseList(iResourceDTOList);
+
+        return iResourceDTOListParsed;
     }
 
     /**
@@ -364,26 +418,5 @@ public class IResourceServiceImpl implements IResourceService {
 
         return topLevelMenus;
     }
-
-//    public static void main(String[] args) {
-//        List<IResource> iResourceList = new ArrayList<>();
-//        for(int i = 1; i<10; i++){
-//            IResource iResource  = new IResource();
-//            iResource.setSort(i);
-//            iResource.setName("资源名称 "+i);
-//            iResourceList.add(iResource);
-//
-//            System.out.println(iResource);
-//        }
-//        List<IResource> iResourceList2 = iResourceList
-//                .stream()
-//                .sorted((IResource r1,IResource r2) -> r1.getSort().compareTo(r2.getSort()))
-//                .collect(Collectors.toList());
-//
-//        System.out.println("========================");
-//        for (IResource iResource : iResourceList2) {
-//            System.out.println(iResource);
-//        }
-//    }
 
 }

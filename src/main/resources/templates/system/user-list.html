@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="UTF-8" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <head th:include="common/layout :: htmlhead" th:with="pagetitle='用户管理'"></head>
+    <link rel="stylesheet/less" th:href="@{/static/css/system/user.less}" />
+</head>
+
+<body>
+    <!--视图容器-->
+    <div class="view-framework">
+        <!--头部-->
+        <div th:include="common/layout :: bodyhead" class="viewFramework-topbar"></div>
+        <!--body主区域-->
+        <div class="viewFramework-body">
+            <div th:include="common/layout :: bodysidebar" class="viewFramework-sidebar"></div>
+
+            <!--右侧主显示区域-->
+            <div class="viewFramework-product">
+                <div class="user-box">
+                    <div class="title-bar">
+                        <a href="javascript:void(0)" class="title-bar-text">用户管理</a>
+                        <div class="title-search-box">
+                            <!--<div class="form-group">-->
+                                <!--<label class="sr-only" for="exampleInputAmount">Amount (in dollars)</label>-->
+                                <div class="">
+                                    <!--<div class="input-group-addon">$</div>-->
+                                    <input id="request-url" th:value="${requestURL}" class="hide" />
+                                    <input id="user-search-input" th:value="${parameter}" type="text" class="form-control" placeholder="请输入用户名/昵称/手机号" autofocus="true" />
+                                    <button id="user-search-button" class="button button-primary title-search-button">搜索</button>
+                                </div>
+                            <!--</div>-->
+                        </div>
+                        <!--<div class="title-button-box">-->
+
+                        <!--</div>-->
+                    </div>
+
+                    <!--table start-->
+                    <div class="table-box">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr class="active">
+                                    <th>用户名</th>
+                                    <th>昵称</th>
+                                    <th>邮箱</th>
+                                    <th>手机号</th>
+                                    <th>操作
+                                        <a href="javascript:void(0)" class="hover-primary">
+                                            <i class="iconfont icon-add"></i>
+                                        </a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user:${userPage.content}">
+                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.nickname}"></td>
+                                    <td th:text="${user.email}"></td>
+                                    <td th:text="${user.mobile}"></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--table-end-->
+                    <span th:text="${test}"></span>
+                    <span th:text="${onlineUser}"></span>
+                    <span th:text="${menu}"></span>
+
+                    <!--引入分页-->
+                    <div class="page-box"
+                         th:include="common/layout :: modulepage"
+                         th:with="pageHrefPrefix=${pageHrefPrefix},pageHrefParaName='page',pageParameters=${userPage}"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!--引入script数据包-->
+    <scripts th:include="common/layout :: htmlscripts"></scripts>
+
+    <script type="text/javascript" th:src="@{/static/libs/less/less.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/system/user.js}"></script>
+
+</body>
+</html>

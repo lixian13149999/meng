@@ -36,7 +36,7 @@ spring:
 
 common:
   parameters:
-    check-login-authorize: false #是否执行登录拦截
+    check-login-authorize: true #是否执行登录拦截
     take-request-sql-log: false #是否记录请求日志到mysql数据库
     take-request-log-back: false #是否记录请求日志到logback文件
   page:

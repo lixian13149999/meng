@@ -12,10 +12,12 @@ public interface SessionResourceConstant {
 
     String ONLINE_USER_NAME = "online_user_name_%s";
 
-    String PARENT_USER = "parent_user_%s";
+//    String PARENT_USER = "parent_user_%s";
 
     String MENUS = "menus_%s";
 
     String BUTTONS = "buttons_%s";
+
+    String PARSE_I_RESOURCE = "parse_i_resource_%s";
 
 }

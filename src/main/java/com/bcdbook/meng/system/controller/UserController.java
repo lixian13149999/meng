@@ -1,6 +1,8 @@
 package com.bcdbook.meng.system.controller;
 
+import com.bcdbook.meng.common.annotation.ResponseAppend;
 import com.bcdbook.meng.common.constant.PageConstant;
+import com.bcdbook.meng.common.constant.ResponseAppendItemConstant;
 import com.bcdbook.meng.common.constant.SwaggerTagsConstant;
 import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.CommonException;
@@ -151,6 +153,7 @@ public class UserController {
      * @description
      */
     @GetMapping("/list/{userType}")
+    @ResponseAppend(appendItems = {ResponseAppendItemConstant.ONLINE_USER})
 //    @ResponseBody
     @ApiOperation(value = "查询用户列表"
             , notes = "根据传入的用户类型,页码及每页的数据量,查询用户的page集合")

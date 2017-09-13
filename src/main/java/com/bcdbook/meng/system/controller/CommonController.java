@@ -11,9 +11,12 @@ import com.bcdbook.meng.common.service.CommonRedisService;
 import com.bcdbook.meng.common.util.CookieUtil;
 import com.bcdbook.meng.common.util.MD5Util;
 import com.bcdbook.meng.common.util.ResultUtil;
+import com.bcdbook.meng.system.DTO.IResourceDTO;
 import com.bcdbook.meng.system.DTO.UserDTO;
 import com.bcdbook.meng.system.form.LoginUserForm;
 import com.bcdbook.meng.system.model.User;
+import com.bcdbook.meng.system.service.IResourceService;
+import com.bcdbook.meng.system.service.RoleService;
 import com.bcdbook.meng.system.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -43,6 +47,11 @@ public class CommonController {
     //注入用户的service
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private IResourceService iResourceService;
 
     //注入redis模板
 //    @Resource(name = RedisTemplateConstent.USER_AUTHORIZE_REDIS_TEMPLATE)
@@ -86,7 +95,7 @@ public class CommonController {
 //    @ApiImplicitParam(name = "loginUserForm", value = "登录用户" ,required = true)
     public Result doLogin(@Valid LoginUserForm loginUserForm,BindingResult bindingResult,
                           HttpServletResponse response){
-        /**
+        /*
          * 参数合法性校验
          */
         if(bindingResult.hasErrors()){
@@ -161,6 +170,18 @@ public class CommonController {
          */
         //设置cookie的保持登录状态
         CookieUtil.set(response, CookieConstant.KEEP_ONLINE, keepOnline.toString(), maxAge);
+
+
+        //根据用户的id,获取角色的id集合
+        List<String> roleIdList = roleService.listRoleIdByUserId(user.getId());
+        //根据角色的id集合,获取序列化好的资源集合
+        List<IResourceDTO> iResourceDTOList = iResourceService.listIResourceByRoleIdList(roleIdList);
+
+
+        commonRedisService.set(String.format(SessionResourceConstant.PARSE_I_RESOURCE,tokenValue),
+                iResourceDTOList.toString(),
+                expire,
+                TimeUnit.SECONDS);
 
         return ResultUtil.success();
     }

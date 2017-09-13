@@ -1,0 +1,24 @@
+@charset "utf-8";
+.form-error-msg {
+  position: absolute;
+  right: 25px;
+  top: 23%;
+  color: #ff4351;
+  display: none;
+}
+.has-error .control-label {
+  color: #ff4351;
+}
+.has-error .form-control {
+  border-color: #ff4351;
+}
+.has-error .form-error-msg {
+  display: block;
+}
+label {
+  font-weight: 500;
+}
+.form-control {
+  border-radius: 0px;
+  height: 38px;
+}

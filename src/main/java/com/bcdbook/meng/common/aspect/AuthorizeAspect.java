@@ -5,7 +5,7 @@ import com.bcdbook.meng.common.constant.CookieConstant;
 import com.bcdbook.meng.common.constant.RedisConstant;
 import com.bcdbook.meng.common.constant.SessionResourceConstant;
 import com.bcdbook.meng.common.enums.ResultEnum;
-import com.bcdbook.meng.common.exception.AuthorizeException;
+import com.bcdbook.meng.common.exception.LoginException;
 import com.bcdbook.meng.common.service.CommonRedisService;
 import com.bcdbook.meng.common.util.CookieUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +90,8 @@ public class AuthorizeAspect {
             //校验cookie中的token
             if (tokenCookie == null) {
                 log.warn("[登录校验]Cookie中token已过期");
-                throw new AuthorizeException(ResultEnum.COOKIE_EXPIRED);
+
+                throw new LoginException(ResultEnum.COOKIE_EXPIRED);
             }
 
             //查询redis获取redis的值
@@ -98,7 +99,7 @@ public class AuthorizeAspect {
             String redisTokenValue = commonRedisService.get(String.format(RedisConstant.TOKEN_PREFIX, tokenCookie.getValue()));
             if (StringUtils.isEmpty(redisTokenValue)) {
                 log.warn("[登录校验]Redis中token已过期");
-                throw new AuthorizeException(ResultEnum.REDIS_EXPIRED);
+                throw new LoginException(ResultEnum.REDIS_EXPIRED);
             }
 
             /**

@@ -37,15 +37,12 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    /**
-     * @param userId
-     * @return java.util.List<com.bcdbook.meng.system.model.Role>
-     * @author summer
-     * @date 2017/8/12 下午11:46
-     * @description 根据用户的id, 获取其角色集合
-     */
     @Override
-    public List<Role> listRoleByUserId(String userId) {
+    public List<String> listRoleIdByUserId(String userId) {
+        if(StringUtils.isEmpty(userId)){
+            return null;
+        }
+
         //根据用户id获取用户角色中间表对象的集合
         List<UserRole> userRoleList = userRoleRepository.findByUserRoleKey_UserId(userId);
         //判断集合的合法性, 为空则直接返回空
@@ -62,7 +59,26 @@ public class RoleServiceImpl implements RoleService {
                 .collect(
                         Collectors.toList()
                 );
-        //根据角色id集合,获取角色对象集合
+
+        return roleIdList;
+    }
+
+    /**
+     * @param userId
+     * @return java.util.List<com.bcdbook.meng.system.model.Role>
+     * @author summer
+     * @date 2017/8/12 下午11:46
+     * @description 根据用户的id, 获取其角色集合
+     */
+    @Override
+    public List<Role> listRoleByUserId(String userId) {
+
+        if(StringUtils.isEmpty(userId)){
+            return null;
+        }
+
+        List<String> roleIdList = listRoleIdByUserId(userId);
+                //根据角色id集合,获取角色对象集合
         List<Role> roleList = roleRepository.findByIdIsIn(roleIdList);
 
         return roleList;

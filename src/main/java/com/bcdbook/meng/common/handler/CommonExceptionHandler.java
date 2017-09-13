@@ -3,12 +3,14 @@ package com.bcdbook.meng.common.handler;
 import com.bcdbook.meng.common.enums.ResultEnum;
 import com.bcdbook.meng.common.exception.AuthorizeException;
 import com.bcdbook.meng.common.exception.CommonException;
+import com.bcdbook.meng.common.exception.LoginException;
 import com.bcdbook.meng.common.result.Result;
 import com.bcdbook.meng.common.util.ResultUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * @Author summer
@@ -29,7 +31,8 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public Result handle(Exception e) {
+    public Result exceptionHandle(Exception e) {
+        log.warn("进入exceptionHandle");
         if (e instanceof CommonException) {
             CommonException commonException = (CommonException) e;
             return ResultUtil.error(commonException.getCode(),commonException.getMessage());
@@ -40,5 +43,14 @@ public class CommonExceptionHandler {
             log.error("【系统异常】{}", e);
             return ResultUtil.error(ResultEnum.ERROR);
         }
+    }
+
+    @ExceptionHandler(value = LoginException.class)
+    public ModelAndView loginExceptionHandler(){
+        log.warn("loginExceptionHandler");
+
+        return new ModelAndView("redirect:"
+                .concat("/login")
+        );
     }
 }

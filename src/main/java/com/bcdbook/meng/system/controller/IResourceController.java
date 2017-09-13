@@ -91,9 +91,18 @@ public class IResourceController {
         return ResultUtil.success();
     }
 
+    /**
+     * @author summer
+     * @date 2017/9/13 下午9:32
+     * @param userId
+     * @return com.bcdbook.meng.common.result.Result
+     * @description 根据用户的id,获取其所含的资源的对象集合
+     * 去重,并排序
+     */
     @ResponseBody
     @GetMapping("/authorization")
     public Result authorization(@Valid String userId){
+
         if (StringUtils.isEmpty(userId)){
             throw new CommonException(ResultEnum.PARAM_IS_EMPTY);
         }
