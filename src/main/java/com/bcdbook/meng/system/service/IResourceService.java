@@ -54,6 +54,14 @@ public interface IResourceService {
     List<IResourceDTO> listIResourceByIdList(List<String> iResourceIdList);
 
     /**
+     * 根据角色集合,查询出其所含有的资源的集合,
+     * 不结构化
+     * @param roleIdList
+     * @return
+     */
+    List<IResource> listUnparseIResourceByRoleIdList(List<String> roleIdList);
+
+    /**
      * 查询所有的资源集合,并根据传入的资源的id集合,标注其为选中状态
      * 同时进行父子集序列化封装
      * @param iResourceIdList
@@ -63,14 +71,14 @@ public interface IResourceService {
 
     /**
      * 根据角色的id集合,查询所有的资源的id集合
-     * @param roleList
+     * @param roleIdList
      * @return
      */
-    List<String> listIResourceIdByRoleIdList(List<String> roleList);
+    List<String> listIResourceIdByRoleIdList(List<String> roleIdList);
 
     /**
      * 根据角色的id集合,查询其所拥有的资源,并进行序列化封装
-     * @param roleList
+     * @param roleIdList
      * @return
      */
     List<IResourceDTO> listIResourceByRoleIdList(List<String> roleIdList);

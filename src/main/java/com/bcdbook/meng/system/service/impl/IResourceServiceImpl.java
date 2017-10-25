@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.thymeleaf.util.ListUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -57,6 +58,8 @@ public class IResourceServiceImpl implements IResourceService {
      * @param iResource
      * @return com.bcdbook.meng.system.model.IResource
      * @description 保存资源的方法
+     * 1. 父级资源需要存在(如果有父级)
+     * 2. button不允许有下级菜单
      */
     @Override
     @Transactional
@@ -200,7 +203,8 @@ public class IResourceServiceImpl implements IResourceService {
      * @date 2017/8/21 下午8:20
      * @param
      * @return java.util.List<com.bcdbook.meng.system.model.IResource>
-     * @description 查询所有的资源集合,做结构化处理
+     * @description 查询所有的资源集合,
+     * 做结构化处理
      */
     @Override
     public List<IResourceDTO> listAll() {
@@ -229,7 +233,9 @@ public class IResourceServiceImpl implements IResourceService {
      * @date 2017/8/22 下午1:45
      * @param iResourceIdList
      * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
-     * @description 根据资源的id集合,获取相关资源对象(菜单),未序列化
+     * @description
+     * 根据菜单的id集合,获取相关资源对象(菜单),
+     * 并结构化
      */
     @Override
     public List<IResourceDTO> listIResourceByIdList(List<String> iResourceIdList) {
@@ -249,10 +255,31 @@ public class IResourceServiceImpl implements IResourceService {
 
     /**
      * @author summer
+     * @date 2017/9/15 下午1:03
+     * @param roleIdList
+     * @return java.util.List<com.bcdbook.meng.system.model.IResource>
+     * @description 根据角色的id集合,查询其含有的资源对象
+     * 不结构化
+     */
+    @Override
+    public List<IResource> listUnparseIResourceByRoleIdList(List<String> roleIdList){
+        //参数合法性判断
+        if(ListUtils.isEmpty(roleIdList)){
+            return null;
+        }
+        //根据角色的id集合,查询对应的资源id集合,并去重
+        List<String> iResourceIdList = listIResourceIdByRoleIdList(roleIdList);
+        return iResourceRepository.findByIdIn(iResourceIdList);
+    }
+
+    /**
+     * @author summer
      * @date 2017/8/22 下午2:23
      * @param iResourceIdList 为已经拥有的资源id集合
      * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
-     * @description 查询出所有的资源对象,并标注出传入id集合的资源对象
+     * @description
+     * 查询出所有的资源对象,
+     * 并标注出传入id集合的资源对象
      */
     @Override
     public List<IResourceDTO> listAllAndChecked(List<String> iResourceIdList) {
@@ -292,7 +319,9 @@ public class IResourceServiceImpl implements IResourceService {
      * @date 2017/9/13 下午8:43
      * @param rolesIdList
      * @return java.util.List<java.lang.String>
-     * @description 根据角色的id集合,查询出其含有的资源的id集合,并去重
+     * @description
+     * 根据角色的id集合,查询出其含有的资源的id集合,
+     * 并去重
      */
     @Override
     public List<String> listIResourceIdByRoleIdList(List<String> rolesIdList) {
@@ -318,7 +347,9 @@ public class IResourceServiceImpl implements IResourceService {
      * @date 2017/9/13 下午9:04
      * @param roleIdList
      * @return java.util.List<com.bcdbook.meng.system.DTO.IResourceDTO>
-     * @description 根据角色的id集合,查询其对应的资源集合,并进行序列化封装
+     * @description
+     * 根据角色的id集合,查询其对应的菜单集合,
+     * 并进行结构化封装
      */
     @Override
     public List<IResourceDTO> listIResourceByRoleIdList(List<String> roleIdList) {
@@ -330,17 +361,10 @@ public class IResourceServiceImpl implements IResourceService {
         //获取资源的id集合
         List<String> iresourceIdList = listIResourceIdByRoleIdList(roleIdList);
 
-        //根据资源id集合,查询对应的资源对象
-        List<IResourceDTO> iResourceDTOList = (iresourceIdList==null||iresourceIdList.size()<=0)
-                ? null
-                : listIResourceByIdList(iresourceIdList);
+        List<IResource> iResourceList = iResourceRepository.findByIResourceTypeAndIdIn(IResourceTypeEnum.MENU.getCode(),iresourceIdList);
+        List<IResourceDTO> iResourceDTOList = IResource2IResourceDTOConverter.convert(iResourceList);
 
-        //对查询出的资源对象进行序列化处理
-        List<IResourceDTO> iResourceDTOListParsed = (iResourceDTOList==null||iResourceDTOList.size()<=0)
-                ? null
-                : parseList(iResourceDTOList);
-
-        return iResourceDTOListParsed;
+        return parseList(iResourceDTOList);
     }
 
     /**

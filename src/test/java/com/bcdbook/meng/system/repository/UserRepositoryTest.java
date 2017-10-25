@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Objects;
+
 /**
  * @Author summer
  * @Date 2017/8/12 下午1:21
@@ -41,8 +43,10 @@ public class UserRepositoryTest {
 //        user.setCertificationStatus(1);
 //        user.setUserStatus(2);
         User result2 = userRepository.save(user2);
-        Assert.assertNotNull(result);
 
+
+        Assert.assertNotNull(result);
+//        Objects.equals("12", "12");
 
         log.info("[测试-添加用户]");
     }
@@ -62,8 +66,13 @@ public class UserRepositoryTest {
 //        user.setUsername("summer");
 //        user.setUserPassword("123321");
 //        userRepository.save(user);
-        User user = userRepository.findOne("92077e8b-5cf7-4f10-a762-61b691724583");
+//        User user = userRepository.findOne("92077e8b-5cf7-4f10-a762-61b691724583");
+        User user = new User();
+        user.setId("33e9c017-0997-4ca8-a502-0b0f1ab83efb");
         user.setUsername("summer");
+//        user.setEmail("xianforwork@163.com");
+        user.setUserPassword("123");
+
         userRepository.save(user);
     }
 

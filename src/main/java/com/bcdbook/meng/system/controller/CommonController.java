@@ -34,8 +34,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @Author summer
- * @Date 2017/8/13 下午5:36
+ * @author summer
+ * @date 2017/8/13 下午5:36
  * 全局的Controller,用于登录登出等操作
  */
 @Controller
@@ -240,6 +240,14 @@ public class CommonController {
 
         return "success";
     }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public String test(){
+        throw new CommonException(ResultEnum.PARAM_ERROR);
+//        return "abc";
+    }
+
     @GetMapping("/socket")
     public String getInput(){
         return "/common/chart";

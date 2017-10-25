@@ -37,6 +37,19 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
+
+    /**
+     * @author summer
+     * @date 2017/8/24 下午2:17
+     * @param role
+     * @return com.bcdbook.meng.system.model.Role
+     * @description 添加角色的方法
+     */
+    @Override
+    public Role save(Role role) {
+        return roleRepository.save(role);
+    }
+
     @Override
     public List<String> listRoleIdByUserId(String userId) {
         if(StringUtils.isEmpty(userId)){
@@ -84,17 +97,6 @@ public class RoleServiceImpl implements RoleService {
         return roleList;
     }
 
-    /**
-     * @author summer
-     * @date 2017/8/24 下午2:17
-     * @param role
-     * @return com.bcdbook.meng.system.model.Role
-     * @description 添加角色的方法
-     */
-    @Override
-    public Role save(Role role) {
-        return roleRepository.save(role);
-    }
 
     /**
      * @author summer

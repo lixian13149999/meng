@@ -4,8 +4,10 @@ import com.bcdbook.meng.system.DTO.UserDTO;
 import com.bcdbook.meng.system.converter.User2UserDTOConverter;
 import com.bcdbook.meng.system.model.User;
 import com.bcdbook.meng.system.model.UserRole;
+import com.bcdbook.meng.system.module.UserRoleKey;
 import com.bcdbook.meng.system.repository.UserRepository;
 import com.bcdbook.meng.system.repository.UserRoleRepository;
+import com.bcdbook.meng.system.service.RoleService;
 import com.bcdbook.meng.system.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,51 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private RoleService roleService;
+
+    /**
+     * @author summer
+     * @date 2017/8/22 下午4:51
+     * @param userDTO
+     * @return com.bcdbook.meng.system.DTO.UserDTO
+     * @description 添加用户的方法
+     */
+//    @Override
+//    public UserDTO save(UserDTO userDTO) {
+//
+//        if(userDTO==null){
+//            return null;
+//        }
+//
+//        User user = User2UserDTOConverter.reconvert(userDTO);
+//
+//        User resultUser = userRepository.save(user);
+//
+//        return User2UserDTOConverter.convert(resultUser);
+//    }
+
+    /**
+     * @author summer
+     * @date 2017/8/24 上午11:23
+     * @param user
+     * @return com.bcdbook.meng.system.DTO.UserDTO
+     * @description 保存用户的方法
+     */
+    @Override
+    public UserDTO save(User user) {
+
+        if(user==null){
+            return null;
+        }
+
+        User result = userRepository.save(user);
+
+        UserDTO userDTO = User2UserDTOConverter.convert(user);
+
+        return userDTO;
+    }
 
     /**
      * @author summer
@@ -83,48 +130,6 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.findByUsernameAndUserPassword(username,userPassword);
-    }
-
-    /**
-     * @author summer
-     * @date 2017/8/22 下午4:51
-     * @param userDTO
-     * @return com.bcdbook.meng.system.DTO.UserDTO
-     * @description 添加用户的方法
-     */
-    @Override
-    public UserDTO save(UserDTO userDTO) {
-
-        if(userDTO==null){
-            return null;
-        }
-
-        User user = User2UserDTOConverter.reconvert(userDTO);
-
-        User resultUser = userRepository.save(user);
-
-        return User2UserDTOConverter.convert(resultUser);
-    }
-
-    /**
-     * @author summer
-     * @date 2017/8/24 上午11:23
-     * @param user
-     * @return com.bcdbook.meng.system.DTO.UserDTO
-     * @description 保存用户的方法
-     */
-    @Override
-    public UserDTO save(User user) {
-
-        if(user==null){
-            return null;
-        }
-
-        User result = userRepository.save(user);
-
-        UserDTO userDTO = User2UserDTOConverter.convert(user);
-
-        return userDTO;
     }
 
     /**
@@ -232,4 +237,52 @@ public class UserServiceImpl implements UserService {
         return userDTOPage;
     }
 
+    /**
+     * @author summer
+     * @date 2017/9/18 下午1:42
+     * @param userId
+     * @param roleId
+     * @return com.bcdbook.meng.system.model.UserRole
+     * @description 根据传入的用户id和角色id
+     * 给用户添加角色
+     */
+    @Override
+    public Boolean putRole(String userId, String roleId) {
+        //参数合法性校验
+        if(StringUtils.isEmpty(userId)||StringUtils.isEmpty(roleId)){
+            return false;
+        }
+        //验证值是否存在
+        if((findOne(userId)==null) || (roleService.findOne(roleId)==null)){
+            return false;
+        }
+        
+        //创建用户/角色对象
+        UserRole userRole = new UserRole(new UserRoleKey(userId,roleId));
+        //执行关系保存
+        UserRole result = userRoleRepository.save(userRole);
+        return result!=null;
+    }
+
+    /**
+     * @author summer
+     * @date 2017/9/18 下午1:44
+     * @param userId
+     * @param roleId
+     * @return com.bcdbook.meng.system.model.UserRole
+     * @description 根据传入的用户id和角色id
+     * 去除用户的角色
+     */
+    @Override
+    public Boolean removeRole(String userId, String roleId) {
+        //参数合法性校验
+        if(StringUtils.isEmpty(userId)||StringUtils.isEmpty(roleId)){
+            return false;
+        }
+
+        UserRole userRole = new UserRole(new UserRoleKey(userId,roleId));
+        userRoleRepository.delete(userRole);
+
+        return true;
+    }
 }

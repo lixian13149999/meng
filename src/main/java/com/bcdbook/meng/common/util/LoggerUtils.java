@@ -15,8 +15,7 @@ public class LoggerUtils {
      * @param request
      * @return
      */
-    public static String getCliectIp(HttpServletRequest request)
-    {
+    public static String getCliectIp(HttpServletRequest request){
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.trim() == "" || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");

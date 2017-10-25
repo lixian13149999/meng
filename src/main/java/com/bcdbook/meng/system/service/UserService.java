@@ -41,7 +41,7 @@ public interface UserService {
      * @param userDTO
      * @return
      */
-    UserDTO save(UserDTO userDTO);
+//    UserDTO save(UserDTO userDTO);
 
     /**
      * 保存用户(传入user对象)
@@ -79,4 +79,9 @@ public interface UserService {
      * @return
      */
     Page<UserDTO> listUserByUserTypeAndKey(Integer userType,String parameter, Pageable pageable);
+
+
+    Boolean putRole(String userId, String roleId);
+
+    Boolean removeRole(String userId,String roleId);
 }
