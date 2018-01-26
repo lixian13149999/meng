@@ -4,14 +4,14 @@ import com.bcdbook.meng.common.enums.ResultEnum;
 import lombok.Getter;
 
 /**
- * @Author summer
- * @Date 2017/8/14 上午8:59
+ * @author summer
+ * @date 2017/8/14 上午8:59
  * 公共的异常类
  */
 @Getter
 public class CommonException extends RuntimeException {
 
-    /*
+    /**
      * 错误码
      */
     private Integer code;

@@ -42,6 +42,7 @@ common:
   page:
       defaultPage: 1 #默认页码
       defaultSize: 10 #默认每页显示数量
+  logPath: /Users/lason/workspaces/idea/logs
 
 #my:
 #  redis:
